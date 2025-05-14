@@ -20,7 +20,7 @@ def lade_csv_daten(dateipfad):
 
 # Flugzeugdaten laden
 dateipfad = 'Aircraft.csv'  # Passe den Pfad an!
-flugzeugdaten = lade_csv_daten(dateipfad)
+flugzeugdaten = lade_csv_daten(dateipfad) #bleibt drin
 
 if flugzeugdaten is None:
     print("Fehler: Konnte die Flugzeugdaten nicht laden.")
