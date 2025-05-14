@@ -126,12 +126,6 @@ class FlugzeugDatenApp(ctk.CTk):
         self.bei_hoehe_entry = ctk.CTkEntry(master=self.add_window, placeholder_text="bei Höhe")
         self.bei_hoehe_entry.pack(pady=5)
 
-        self.c_s_v = ctk.CTkEntry(master=self.add_window, placeholder_text="CSV")
-        self.c_s_v.pack(pady=5)
-
-        self.r_w_r = ctk.CTkEntry(master=self.add_window, placeholder_text="RWR")
-        self.r_w_r.pack(pady=5)
-
         self.max_hoehe_entry = ctk.CTkEntry(master=self.add_window, placeholder_text="max Höhe")
         self.max_hoehe_entry.pack(pady=5)
 
