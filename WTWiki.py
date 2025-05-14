@@ -61,8 +61,7 @@ class FlugzeugDatenApp(ctk.CTk):
         self.confirm_button = ctk.CTkButton(master=self.frame_links, text="Bestätigen", command=self.zeige_daten)
         self.confirm_button.pack(pady=20)
 
-        self.add_button = ctk.CTkButton(master=self.frame_links, text="Add Nation/Flugzeug",
-                                        command=self.open_add_window)
+        self.add_button = ctk.CTkButton(master=self.frame_links, text="Add Nation/Flugzeug", command=self.open_add_window)
         self.add_button.pack(pady=10)
 
         self.delete_button = ctk.CTkButton(master=self.frame_links, text="Löschen", command=self.delete_entry)
