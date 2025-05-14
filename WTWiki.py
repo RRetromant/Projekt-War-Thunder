@@ -1,3 +1,5 @@
+from logging import disable
+
 import customtkinter as ctk
 import csv
 
@@ -46,11 +48,10 @@ class FlugzeugDatenApp(ctk.CTk):
         self.frame_links = ctk.CTkFrame(master=self, width=200)
         self.frame_links.grid(row=0, column=0, padx=20, pady=20, sticky="nsew")
 
-        self.nationen_label = ctk.CTkLabel(master=self.frame_links, text="Nation auswählen:")
+        self.nationen_label = ctk.CTkLabel(master=self.frame_links,text="Nation auswählen:")
         self.nationen_label.pack(pady=10)
 
-        self.nationen_combobox = ctk.CTkComboBox(master=self.frame_links, values=self.nationen,
-                                                 command=self.nation_ausgewaehlt)
+        self.nationen_combobox = ctk.CTkComboBox(master=self.frame_links, values=self.nationen,command=self.nation_ausgewaehlt)
         self.nationen_combobox.pack(pady=10)
 
         self.flugzeuge_label = ctk.CTkLabel(master=self.frame_links, text="Flugzeug auswählen:")
@@ -66,11 +67,11 @@ class FlugzeugDatenApp(ctk.CTk):
 
         self.delete_button = ctk.CTkButton(master=self.frame_links, text="Löschen", command=self.delete_entry)
         self.delete_button.pack(pady=10)
-
-        # Rechte Seite: Textfeld für die Daten
+#------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#______________________________________________________________________________________________________________________________Rechte Seite: Textfeld für die Daten
         self.text_area = ctk.CTkTextbox(master=self, width=400, wrap="word")
         self.text_area.grid(row=0, column=1, padx=20, pady=20, sticky="nsew")
-
+#___________________________________________________________________________________________________________________________________________________________________
     def nation_ausgewaehlt(self, nation):
         self.selected_nation = nation
         self.flugzeuge_combobox.configure(values=self.flugzeuge_pro_nation.get(nation, []))
