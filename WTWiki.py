@@ -15,7 +15,7 @@ def lade_csv_daten(dateipfad):
         print(f"Fehler beim Lesen der Datei: {e}")
         return None
 
-# Flugzeugdaten laden /testatast
+# Flugzeugdaten laden
 dateipfad = 'Aircraft.csv'  # Passe den Pfad an!
 flugzeugdaten = lade_csv_daten(dateipfad)
 
@@ -26,7 +26,7 @@ if flugzeugdaten is None:
 class FlugzeugDatenApp(ctk.CTk):
     def __init__(self):
         super().__init__()
-        self.title("Flugzeugdaten")
+        self.title("Wiki")
         self.geometry("800x600")  # Passe die Größe nach Bedarf an
         self.grid_columnconfigure(1, weight=1)  # Für das Textfeld
         self.grid_rowconfigure(0, weight=1)  # Für das Hauptfenster
