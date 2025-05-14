@@ -49,8 +49,7 @@ class FlugzeugDatenApp(ctk.CTk):
         self.nationen_label = ctk.CTkLabel(master=self.frame_links, text="Nation auswählen:")
         self.nationen_label.pack(pady=10)
 
-        self.nationen_combobox = ctk.CTkComboBox(master=self.frame_links, values=self.nationen,
-                                                 command=self.nation_ausgewaehlt)
+        self.nationen_combobox = ctk.CTkComboBox(master=self.frame_links, values=self.nationen,command=self.nation_ausgewaehlt)
         self.nationen_combobox.pack(pady=10)
 
         self.flugzeuge_label = ctk.CTkLabel(master=self.frame_links, text="Flugzeug auswählen:")
