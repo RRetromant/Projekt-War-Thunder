@@ -12,12 +12,12 @@ Name,Type,Projectile-Masse,Guidance,Aspect,Lock-range-in-rear-aspect,Lock-range-
 250 lb LDGP Mk 81,,117.934 kg,,,,,FALSE,,,,,Comp. H6,45.4 kg,61.3 kg
 50 kg FAB-50sv,,49.8 kg,,,,,FALSE,,,,,TNT,26.4 kg,
 500 Ib LDGP Mk 82,,240.858 kg,,,,,FALSE,,,,,Comp. H6,87.1 kg,117.6 kg
-500 Ib Mk 82 Snakeye high-drag tail fin retarded,,226.796 kg,,,,,FALSE,,,,,Comp. H6,87.1 kg,117.6 kg
+500 Ib Mk 82 Snakeye,,226.796 kg,,,,,FALSE,,,,,Comp. H6,87.1 kg,117.6 kg
 500 kg FAB-500M-54,,478 kg,,,,,FALSE,,,,,TNT,201 kg,201 kg
 500 kg FAB-500M-62,,508.3 kg,,,,,FALSE,,,,,TGAF-5,213 kg,340.8 kg
 500 kg FAB-500Sh,,515 kg,,,,,FALSE,,,,,TGAF-5,226.6 kg,362.6 kg
 500 lb AN-M64A1,,242.7 kg,,,,,FALSE,,,,,,,
-500 lb Mk 82 Snakeye high-drag tail fin retarded,retarded bombs,254.012 kg,,,,,FALSE,,,,,Comp. H6,87.1 kg,117.6 kg
+500 lb Mk 82 Snakeye,retarded bombs,254.012 kg,,,,,FALSE,,,,,Comp. H6,87.1 kg,117.6 kg
 70mm Hydra-70 M247,dumb bombs,10.2 kg,,,,,FALSE,,,,,Composition B,910 g,1.2 kg
 750 lb M117 cone 45,,340.194 kg,,,,,FALSE,,,,,Tritonal,175.1 kg,206.6 kg
 AGM-12B Bullpup,Air-to-Ground,259 kg,Manual (MCLOS),,,,FALSE,,455 m/s,,30 s,Comp. H6,43 kg,58 kg
