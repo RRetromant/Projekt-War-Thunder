@@ -1,7 +1,8 @@
 from logging import disable
-
+import threading
 import customtkinter as ctk
 import csv
+import time
 
 # Daten laden (ersetze 'Aircraft.csv' durch deinen Dateipfad)
 def lade_csv_daten(dateipfad):
@@ -67,11 +68,15 @@ class FlugzeugDatenApp(ctk.CTk):
 
         self.delete_button = ctk.CTkButton(master=self.frame_links, text="Löschen", command=self.delete_entry)
         self.delete_button.pack(pady=10)
-#------------------------------------------------------------------------------------------------------------------------------------------------------------------
-#______________________________________________________________________________________________________________________________Rechte Seite: Textfeld für die Daten
+#______________________________________________________________________________________________________________________________Oben: Daten Flugzeug
+        self.text_area = ctk.CTkTextbox(master=self, width=400, wrap="word")
+        self.text_area.grid(row=1, column=1, padx=20, pady=20, sticky="nsew")
+        self.text_area.configure(state="disabled")
+#______________________________________________________________________________________________________________________________Unten: Daten Pylon
         self.text_area = ctk.CTkTextbox(master=self, width=400, wrap="word")
         self.text_area.grid(row=0, column=1, padx=20, pady=20, sticky="nsew")
-#___________________________________________________________________________________________________________________________________________________________________
+        self.text_area.configure(state="disabled")
+
     def nation_ausgewaehlt(self, nation):
         self.selected_nation = nation
         self.flugzeuge_combobox.configure(values=self.flugzeuge_pro_nation.get(nation, []))
@@ -83,6 +88,7 @@ class FlugzeugDatenApp(ctk.CTk):
         self.selected_flugzeug = flugzeug
 
     def zeige_daten(self):
+        self.text_area.configure(state="normal") # Normal : Textfeld kann bearbeitet werden
         self.text_area.delete("1.0", "end")  # Lösche den alten Text
         if self.selected_nation and self.selected_flugzeug:
             for zeile in flugzeugdaten:
@@ -91,7 +97,9 @@ class FlugzeugDatenApp(ctk.CTk):
                     for key, value in zeile.items():
                         daten_text += f"- {key}: {value}\n"
                     self.text_area.insert("1.0", daten_text)
+                    self.text_area.configure(state="disabled") # disable : read only
                     return  # Beende die Suche, sobald das Flugzeug gefunden wurde
+
             self.text_area.insert("1.0", "Flugzeugdaten nicht gefunden.")
         else:
             self.text_area.insert("1.0", "Bitte wähle eine Nation und ein Flugzeug aus.")
@@ -207,6 +215,8 @@ class FlugzeugDatenApp(ctk.CTk):
             print("Daten erfolgreich gespeichert.")
         except Exception as e:
             print(f"Fehler beim Speichern der Datei: {e}")
+
+
 
 if __name__ == "__main__":
     app = FlugzeugDatenApp()
