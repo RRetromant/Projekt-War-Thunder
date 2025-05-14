@@ -80,7 +80,7 @@ class FlugzeugDatenApp(ctk.CTk):
     def nation_ausgewaehlt(self, nation):
         self.selected_nation = nation
         self.flugzeuge_combobox.configure(values=self.flugzeuge_pro_nation.get(nation, []))
-        self.flugzeuge_combobox.set(None)  # Setze die Auswahl zurück
+        self.flugzeuge_combobox.set = None  # Setze die Auswahl zurück
         self.selected_flugzeug = None
         self.text_area.delete("1.0", "end")  # Lösche den Text
 
