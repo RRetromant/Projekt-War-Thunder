@@ -1,0 +1,11 @@
+Amount,Pylon_Ges,Pylon_Ges_Anz,Pylon_0,Pylon_1,Pylon_2,Pylon_3,Pylon_4,Pylon_5
+1,100 kg FAB-100M-43,2,,True,,,True,
+2,100 kg FAB-100M-43,2,,,True,True,,
+6,25 kg AO-25M-1 ,2,,,True,True,,
+1,50 kg FAB-50,2,,True,,,True,
+2,50 kg FAB-50,2,,,True,True,,
+1,250 kg FAB-250M-43,2,,True,,,True,
+2,ROFS-132 ,2,True,,,,,True
+2,ROS-82 ,2,True,,,,,True
+2,RBS-132 ,2,True,,,,,True
+2,RBS-82 ,2,True,,,,,True
