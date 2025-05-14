@@ -16,7 +16,7 @@ def lade_csv_daten(dateipfad):
         return None
 
 # Flugzeugdaten laden
-dateipfad = r'C:\Users\Michael\PycharmProjects\PythonProject\.venv\Aircraft.xlsx - Aircraft.csv'  # Passe den Pfad an!
+dateipfad = 'Aircraft.csv'  # Passe den Pfad an!
 flugzeugdaten = lade_csv_daten(dateipfad)
 
 if flugzeugdaten is None:
