@@ -15,7 +15,7 @@ def lade_csv_daten(dateipfad):
         print(f"Fehler beim Lesen der Datei: {e}")
         return None
 
-# Flugzeugdaten laden
+# Flugzeugdaten laden /test
 dateipfad = r'C:\Users\Michael\PycharmProjects\PythonProject\.venv\Aircraft.xlsx - Aircraft.csv'  # Passe den Pfad an!
 flugzeugdaten = lade_csv_daten(dateipfad)
 
