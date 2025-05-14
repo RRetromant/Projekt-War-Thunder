@@ -58,7 +58,7 @@ R-3S,Air-to-Air,75.3 kg,IR,Rear-aspect,3.5 km,,FALSE,9 km,1.7 M,10 G,21 s,TGAF-5
 R-60M,Air-to-Air,44 kg,IR,All-aspect,7.4 km,2 km,FALSE,10 km,2.5 km,30 G,25 s,OKFOL-20,1.4 kg,1.8 kg
 R-73,Air-to-Air,105 kg,IR,All-aspects,11 km,3.4 km,TRUE,30 km,2.5 M,40 G,20 s,OKFOL,3.8 kg,6.1 kg
 R-73E,Air-to-Air,105 kg,IR,All-aspects,11 km,3.4 km,TRUE,30 km,2.5 M,40 G,20 s,OKFOL,3.8 kg,6.1 kg
-R27ER,Air-to-Air,350 kg,SARH+IOG,Front-aspect,,,FALSE,100 km,5.8 M,35 G,60 s,TGAF-5,15 kg,24 kg
+R-27ER,Air-to-Air,350 kg,SARH+IOG,Front-aspect,,,FALSE,100 km,5.8 M,35 G,60 s,TGAF-5,15 kg,24 kg
 RBS-132,Armor-piercing shell,51.6 kg,,,,,FALSE,,,,,TNT,1.4 kg,
 RBS-82,Armor-piercing shell,15 kg,,,,,FALSE,,,,,TNT,480 g,
 ROFS-132 ,,41.9 kg,,,,,FALSE,,,,,TNT,4.6 kg,
