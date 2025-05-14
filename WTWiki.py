@@ -23,7 +23,6 @@ if flugzeugdaten is None:
     print("Fehler: Konnte die Flugzeugdaten nicht laden.")
     exit()  # Beende das Programm, wenn die Daten nicht geladen werden konnten
 
-
 class FlugzeugDatenApp(ctk.CTk):
     def __init__(self):
         super().__init__()
