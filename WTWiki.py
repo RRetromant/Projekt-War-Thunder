@@ -15,14 +15,13 @@ def lade_csv_daten(dateipfad):
         print(f"Fehler beim Lesen der Datei: {e}")
         return None
 
-# Flugzeugdaten laden
+# Flugzeugdaten laden /testatast
 dateipfad = 'Aircraft.csv'  # Passe den Pfad an!
 flugzeugdaten = lade_csv_daten(dateipfad)
 
 if flugzeugdaten is None:
     print("Fehler: Konnte die Flugzeugdaten nicht laden.")
     exit()  # Beende das Programm, wenn die Daten nicht geladen werden konnten
-
 
 class FlugzeugDatenApp(ctk.CTk):
     def __init__(self):
