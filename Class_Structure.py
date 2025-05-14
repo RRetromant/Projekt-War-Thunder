@@ -40,7 +40,3 @@ class AirToAirRocket(AirToGroundRocketGuided): #neuer Stat:  Aspect, Lock-Range,
         self.lock_range = lock_range
         self.lock_range_rear = lock_range_rear
         self.maxg_overload = maxg_overload
-
-def import_csv(name, comma):
-    with open(name) as csvdatei:
-        csv_reader_object = csv.reader(csvdatei, delimiter = comma)
