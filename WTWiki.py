@@ -1,8 +1,5 @@
-from logging import disable
-import threading
 import customtkinter as ctk
 import csv
-import time
 
 # Daten laden (ersetze 'Aircraft.csv' durch deinen Dateipfad)
 def lade_csv_daten(dateipfad):
@@ -19,8 +16,8 @@ def lade_csv_daten(dateipfad):
         return None
 
 # Flugzeugdaten laden
-dateipfad = 'Aircraft.csv'  # Passe den Pfad an!
-flugzeugdaten = lade_csv_daten(dateipfad) #bleibt drin
+dateipfad = 'Aircraft.csv'  #  Dateipfad
+flugzeugdaten = lade_csv_daten(dateipfad) # bleibt drin!!!
 
 if flugzeugdaten is None:
     print("Fehler: Konnte die Flugzeugdaten nicht laden.")
@@ -30,7 +27,7 @@ class FlugzeugDatenApp(ctk.CTk):
     def __init__(self):
         super().__init__()
         self.title("Wiki")
-        self.geometry("800x600")  # Passe die Größe nach Bedarf an
+        self.geometry("800x600")  # Fenster größe
         self.grid_columnconfigure(1, weight=1)  # Für das Textfeld
         self.grid_rowconfigure(0, weight=1)  # Für das Hauptfenster
 
@@ -58,7 +55,7 @@ class FlugzeugDatenApp(ctk.CTk):
         self.flugzeuge_label = ctk.CTkLabel(master=self.frame_links, text="Flugzeug auswählen:")
         self.flugzeuge_label.pack(pady=10)
 
-        self.flugzeuge_combobox = ctk.CTkComboBox(master=self.frame_links, values=[], command=self.flugzeug_ausgewaehlt)
+        self.flugzeuge_combobox = ctk.CTkComboBox(master=self.frame_links, values=[], state = 'normal', command=self.flugzeug_ausgewaehlt)          #state = normal
         self.flugzeuge_combobox.pack(pady=10)
 
         self.confirm_button = ctk.CTkButton(master=self.frame_links, text="Bestätigen", command=self.zeige_daten)
@@ -140,6 +137,21 @@ class FlugzeugDatenApp(ctk.CTk):
 
         self.confirm_add_button = ctk.CTkButton(master=self.add_window, text="Confirm", command=self.save_data)
         self.confirm_add_button.pack(pady=20)
+
+    '''' 
+            # Dropdown-Menü für bestehende Nationen
+            self.nationen = self.flugzeugdaten()
+            self.selected_nation = ctk.StringVar(value=self.nationen[0] if self.nationen else "Keine Nationen verfügbar")
+
+            self.nation_dropdown = ctk.CTkOptionMenu(
+                master=self.add_window,
+                variable=self.selected_nation,
+                values=self.nationen + ["Neue Nation hinzufügen"],
+                command=self.on_nation_select
+            )
+
+            self.nation_dropdown.pack(pady=10)
+    '''''
 
     def save_data(self):
         neue_nation = self.nation_entry.get().strip()
