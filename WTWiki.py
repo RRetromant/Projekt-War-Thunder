@@ -57,6 +57,7 @@ class FlugzeugDatenApp(ctk.CTk):
 
         self.flugzeuge_label = ctk.CTkLabel(master=self.frame_links, text="Flugzeug auswählen:")
         self.flugzeuge_label.pack(pady=10)
+
         self.flugzeuge_combobox = ctk.CTkComboBox(master=self.frame_links, values=[], command=self.flugzeug_ausgewaehlt)
         self.flugzeuge_combobox.pack(pady=10)
 
@@ -72,11 +73,11 @@ class FlugzeugDatenApp(ctk.CTk):
         self.text_area = ctk.CTkTextbox(master=self, width=400, wrap="word")
         self.text_area.grid(row=1, column=1, padx=20, pady=20, sticky="nsew")
         self.text_area.configure(state="disabled")
-#______________________________________________________________________________________________________________________________Unten: Daten Pylon
-        self.text_area = ctk.CTkTextbox(master=self, width=400, wrap="word")
-        self.text_area.grid(row=0, column=1, padx=20, pady=20, sticky="nsew")
-        self.text_area.configure(state="disabled")
-
+#________________________________________________________________________________________________________________________________Unten: Daten Pylon
+        self.text_area_pylon = ctk.CTkTextbox(master=self, width=400, wrap="word")
+        self.text_area_pylon.grid(row=0, column=1, padx=20, pady=20, sticky="nsew")
+        self.text_area_pylon.configure(state="disabled")
+#___________________________________________________________________________________________________________________________________________________
     def nation_ausgewaehlt(self, nation):
         self.selected_nation = nation
         self.flugzeuge_combobox.configure(values=self.flugzeuge_pro_nation.get(nation, []))
@@ -88,7 +89,7 @@ class FlugzeugDatenApp(ctk.CTk):
         self.selected_flugzeug = flugzeug
 
     def zeige_daten(self):
-        self.text_area.configure(state="normal") # Normal : Textfeld kann bearbeitet werden
+        self.text_area.configure(state="normal") # Normal: Textfeld kann bearbeitet werden
         self.text_area.delete("1.0", "end")  # Lösche den alten Text
         if self.selected_nation and self.selected_flugzeug:
             for zeile in flugzeugdaten:
