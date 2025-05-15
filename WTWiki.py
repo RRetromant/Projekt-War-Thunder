@@ -62,11 +62,11 @@ class FlugzeugDatenApp(ctk.CTk):
 #___________________________________________________________________________________________________________________________________________________
     def nation_ausgewaehlt(self, nation):
         self.selected_nation = nation
-        self.flugzeuge_combobox.configure(values=self.flugzeuge_pro_nation.get(nation, []))
-        self.flugzeuge_combobox.set = None  # Setze die Auswahl zurück
+        self.flugzeuge_combobox.configure(values=self.flugzeuge_pro_nation.get(nation, []))                                   #Dropdown menü (Nation)
+        self.flugzeuge_combobox.set = None       # Setze die Auswahl zurück
         self.selected_flugzeug = None
-        self.text_area.delete("1.0", "end")  # Lösche den Text
-
+        self.text_area.delete("1.0", "end")      # Lösche den Text
+#____________________________________________________________________________________________________________________________________________________
     def flugzeug_ausgewaehlt(self, flugzeug):
         self.selected_flugzeug = flugzeug
 
@@ -86,7 +86,7 @@ class FlugzeugDatenApp(ctk.CTk):
             self.text_area.insert("1.0", "Flugzeugdaten nicht gefunden.")
         else:
             self.text_area.insert("1.0", "Bitte wähle eine Nation und ein Flugzeug aus.")
-
+#______________________________________________________________________________________________________________________________________________________
     def open_add_window(self):
         self.add_window = ctk.CTkToplevel(self)
         self.add_window.title("Add Nation/Flugzeug")
@@ -122,7 +122,7 @@ class FlugzeugDatenApp(ctk.CTk):
 
         self.confirm_add_button = ctk.CTkButton(master=self.add_window, text="Confirm", command=self.save_data)
         self.confirm_add_button.pack(pady=20)
-
+#___________________________________________________________________________________________________________________________________________________
     '''' 
             # Dropdown-Menü für bestehende Nationen
             self.nationen = self.flugzeugdaten()
@@ -186,7 +186,7 @@ class FlugzeugDatenApp(ctk.CTk):
             self.text_area.insert("1.0", f"Neue Nation und Flugzeug hinzugefügt: {neue_nation} - {neues_flugzeug}\n")
         else:
             self.text_area.insert("1.0", "Bitte gib ein Flugzeug an.")
-
+#__________________________________________________________________________________________________________________________________________________________
     def delete_entry(self):
         if self.selected_nation and self.selected_flugzeug:
             # Lösche das Flugzeug aus den Daten
@@ -200,7 +200,7 @@ class FlugzeugDatenApp(ctk.CTk):
                 values=self.flugzeuge_pro_nation[self.selected_nation])  # Aktualisiere die Combobox
         else:
             self.text_area.insert("1.0", "Bitte wähle eine Nation und ein Flugzeug zum Löschen aus.")
-
+#__________________________________________________________________________________________________________________________________________________________
     def save_to_csv(self):
         try:
             with open(dateipfad, 'w', newline='', encoding='utf-8') as datei:
@@ -213,7 +213,7 @@ class FlugzeugDatenApp(ctk.CTk):
             print("Daten erfolgreich gespeichert.")
         except Exception as e:
             print(f"Fehler beim Speichern der Datei: {e}")
-
+#_____________________________________________________________________________________________________________________________________________________________
 
 
 if __name__ == "__main__":
