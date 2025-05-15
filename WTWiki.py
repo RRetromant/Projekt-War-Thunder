@@ -1,5 +1,22 @@
 import customtkinter as ctk
 import csv
+
+def lade_csv_daten():
+    try:
+        with open("Aircraft.csv", 'r', newline='', encoding='utf-8') as datei:
+            reader = csv.DictReader(datei)
+            daten = list(reader)
+            return daten
+    except FileNotFoundError:
+        print(f"Fehler: Die Datei Aircraft.csv wurde nicht gefunden.")
+        return None
+    except Exception as e:
+        print(f"Fehler beim Lesen der Datei: {e}")
+        return None
+
+test = lade_csv_daten()
+print (test[0])
+
 # Flugzeugdaten laden
 dateipfad = 'Aircraft.csv'  #  Dateipfad
 flugzeugdaten = lade_csv_daten(dateipfad) # bleibt drin!!!
