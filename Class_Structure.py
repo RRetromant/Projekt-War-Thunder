@@ -13,7 +13,8 @@ class Airplane:
         self.maxheight = maxheight
 
 class Armament: #Beinhaltet dumb Bombs, retarded Bombs, und dumb Rockets
-    def __init__(self, armament_type, projectile_mass, explosive_type, explosive_mass, TNT_equivalent):
+    def __init__(self, name, armament_type, projectile_mass, explosive_type, explosive_mass, TNT_equivalent):
+        self.name = name
         self.armament_type = armament_type
         self. projectile_mass = projectile_mass
         self.explosive_type = explosive_type
@@ -22,20 +23,20 @@ class Armament: #Beinhaltet dumb Bombs, retarded Bombs, und dumb Rockets
 
 #Die nächsten drei Klassen erben die Stats von Armament:
 class WeaponGuided(Armament): #beinhaltet Guided Bombs. neuer Stat: Guidance, Missile-guidance-time
-    def __init__(self, armament_type, projectile_mass, explosive_type, explosive_mass, TNT_equivalent, guidance, missile_guidance_time):
-        super().__init__(armament_type, projectile_mass, explosive_type, explosive_mass, TNT_equivalent)
+    def __init__(self, name, armament_type, projectile_mass, explosive_type, explosive_mass, TNT_equivalent, guidance, missile_guidance_time):
+        super().__init__(name, armament_type, projectile_mass, explosive_type, explosive_mass, TNT_equivalent)
         self.guidance = guidance
         self.missile_guidance_time = missile_guidance_time
 
 class AirToGroundRocketGuided(WeaponGuided): #neuer Stat: Launch range, maxSpeed
-    def __init__(self, armament_type, projectile_mass, explosive_type, explosive_mass, TNT_equivalent, guidance, missile_guidance_time, launch_range, maxspeed):
-        super().__init__(armament_type, projectile_mass, explosive_type, explosive_mass, TNT_equivalent, guidance, missile_guidance_time)
+    def __init__(self, name, armament_type, projectile_mass, explosive_type, explosive_mass, TNT_equivalent, guidance, missile_guidance_time, launch_range, maxspeed):
+        super().__init__(name, armament_type, projectile_mass, explosive_type, explosive_mass, TNT_equivalent, guidance, missile_guidance_time)
         self.launch_range = launch_range
         self.maxspeed = maxspeed
         
 class AirToAirRocket(AirToGroundRocketGuided): #neuer Stat:  Aspect, Lock-Range, Lock-Range-rear, maxG-Overload
-    def __init__(self, armament_type, projectile_mass, explosive_type, explosive_mass, TNT_equivalent, guidance, missile_guidance_time, launch_range, maxspeed, aspect, lock_range, lock_range_rear, maxg_overload):
-        super().__init__(armament_type, projectile_mass, explosive_type, explosive_mass, TNT_equivalent, guidance, missile_guidance_time, launch_range, maxspeed)
+    def __init__(self, name, armament_type, projectile_mass, explosive_type, explosive_mass, TNT_equivalent, guidance, missile_guidance_time, launch_range, maxspeed, aspect, lock_range, lock_range_rear, maxg_overload):
+        super().__init__(name, armament_type, projectile_mass, explosive_type, explosive_mass, TNT_equivalent, guidance, missile_guidance_time, launch_range, maxspeed)
         self.aspect = aspect
         self.lock_range = lock_range
         self.lock_range_rear = lock_range_rear
