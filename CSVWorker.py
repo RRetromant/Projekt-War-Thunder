@@ -22,6 +22,36 @@ def import_Aircraft(filename):
 
     return aircraft_list
 
+def import_Armaments(filename): #BUG: Spuckt auch alles aus, was keinen Type hat
+    armament_list = []
+    with open(filename) as csvfile:
+        armament_reader = csv.DictReader(csvfile, delimiter=',')
+        for row in armament_reader:
+            if row['Type'] in ('dumb bombs', 'retarded bombs', 'dumb rockets'): #dann nur werte, die die Klasse Armament braucht
+                armament= Class_Structure.Armament(
+                    name=row['Name'],
+                    armament_type=row['Type'],
+                    projectile_mass=row['Projectile-Masse'],
+                    explosive_type=row['Explosive-Type'],
+                    explosive_mass=row['Explosive-Mass'],
+                    TNT_equivalent=row['TNT-equivalent'],
+                )
+                armament_list.append(armament)
+
+            if row['Type'] in ('guided bombs'):
+                armament = Class_Structure.WeaponGuided(
+                    name=row['Name'],
+                    armament_type=row['Type'],
+                    projectile_mass=row['Projectile-Masse'],
+                    explosive_type=row['Explosive-Type'],
+                    explosive_mass=row['Explosive-Mass'],
+                    TNT_equivalent=row['TNT-equivalent'],
+                    guidance=row['Guidance'],
+                    missile_guidance_time=row['Missile-guidance-time']
+                )
+                armament_list.append(armament)
+
+    return armament_list
 
 
 #Wird hier konserviert, statt Objekten nutzt man hier eine riesige Liste.
@@ -65,4 +95,12 @@ for i in test:
     testlist.add(i.nation)
 
 print(testlist)
+'''
+
+'''
+test = import_Armaments("Armament.csv")
+testlist = set()
+for i in test:
+    testlist.add(i.name)
+    print(i.name)
 '''
