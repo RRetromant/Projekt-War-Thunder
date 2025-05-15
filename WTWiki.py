@@ -54,11 +54,11 @@ class FlugzeugDatenApp(ctk.CTk):
 #______________________________________________________________________________________________________________________________Oben: Daten Flugzeug
         self.text_area = ctk.CTkTextbox(master=self, width=400, wrap="word")
         self.text_area.grid(row=1, column=1, padx=20, pady=20, sticky="nsew")
-        self.text_area.configure(state="disabled")
+        self.text_area.configure(state="disabled")                                 #Damit das Textfeld von anfang an nicht bearbeitet werden kann
 #________________________________________________________________________________________________________________________________Unten: Daten Pylon
         self.text_area_pylon = ctk.CTkTextbox(master=self, width=400, wrap="word")
         self.text_area_pylon.grid(row=0, column=1, padx=20, pady=20, sticky="nsew")
-        self.text_area_pylon.configure(state="disabled")
+        self.text_area_pylon.configure(state="disabled")                            #Damit das Textfeld von anfang an nicht bearbeitet werden kann
 #___________________________________________________________________________________________________________________________________________________
     def nation_ausgewaehlt(self, nation):
         self.selected_nation = nation
