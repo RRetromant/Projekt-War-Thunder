@@ -71,7 +71,7 @@ class FlugzeugDatenApp(ctk.CTk):
         self.selected_flugzeug = flugzeug
 
     def zeige_daten(self):
-        self.text_area.configure(state="normal") # Normal: Textfeld kann bearbeitet werden
+        self.text_area.configure(state="normal") # Normal: Textfeld kann bearbeitet/aktualisiert werden
         self.text_area.delete("1.0", "end")  # Lösche den alten Text
         if self.selected_nation and self.selected_flugzeug:
             for zeile in flugzeugdaten:
