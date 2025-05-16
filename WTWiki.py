@@ -57,14 +57,14 @@ class FlugzeugDatenApp(ctk.CTk):
         self.nationen_label = ctk.CTkLabel(master=self.frame_links,text="Nation auswählen:")
         self.nationen_label.pack(pady=10)
 
-        self.nationen_combobox = ctk.CTkComboBox(master=self.frame_links, values=self.nationen,command=self.nation_ausgewaehlt)
+        self.nationen_combobox = ctk.CTkOptionMenu(master=self.frame_links, values=self.nationen,command=self.nation_ausgewaehlt)
         self.nationen_combobox.pack(pady=10)
         self.nationen_combobox.set('')
 
         self.flugzeuge_label = ctk.CTkLabel(master=self.frame_links, text="Flugzeug auswählen:")
         self.flugzeuge_label.pack(pady=10)
 
-        self.flugzeuge_combobox = ctk.CTkComboBox(master=self.frame_links, values=[], state = 'normal', command=self.flugzeug_ausgewaehlt)          #state = normal
+        self.flugzeuge_combobox = ctk.CTkOptionMenu(master=self.frame_links, values=[], state = 'normal', command=self.flugzeug_ausgewaehlt)          #state = normal
         self.flugzeuge_combobox.pack(pady=10)
         self.flugzeuge_combobox.set('')
 
