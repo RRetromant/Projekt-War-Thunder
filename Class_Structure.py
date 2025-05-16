@@ -1,5 +1,3 @@
-import csv
-
 class Airplane:
     def __init__(self, nation, name, battlerating, plane_type, turnrate, climbrate, speed, speedheight, maxheight):
         self.nation = nation
@@ -21,7 +19,7 @@ class Armament: #Beinhaltet dumb Bombs, retarded Bombs, und dumb Rockets
         self.explosive_mass = explosive_mass
         self.TNT_equivalent = TNT_equivalent
 
-#Die nächsten drei Klassen erben die Stats von Armament:
+#Die nächsten Klassen erben die Stats von Armament:
 class WeaponGuided(Armament): #beinhaltet Guided Bombs. neuer Stat: Guidance, Missile-guidance-time
     def __init__(self, name, armament_type, projectile_mass, explosive_type, explosive_mass, TNT_equivalent, guidance, missile_guidance_time):
         super().__init__(name, armament_type, projectile_mass, explosive_type, explosive_mass, TNT_equivalent)
@@ -41,3 +39,16 @@ class AirToAirRocket(AirToGroundRocketGuided): #neuer Stat:  Aspect, Lock-Range,
         self.lock_range = lock_range
         self.lock_range_rear = lock_range_rear
         self.maxg_overload = maxg_overload
+
+class Other_Armament(): #beinhaltet Targeting pods und Fuel Tranks
+    def __init__(self, name, armament_type, projectile_mass):
+        self.name = name
+        self.armament_type = armament_type
+        self.projectile_mass = projectile_mass
+
+class Hardpoint:
+    def __init__(self, amount, name, pylon_ges_anz, pylon_bool): #pylon_bool soll eine Liste sein
+        self.amount = amount
+        self.name = name
+        self.pylon_ges_anz = pylon_ges_anz
+        self.pylon_bool = pylon_bool
