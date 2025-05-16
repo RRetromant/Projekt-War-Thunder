@@ -1,6 +1,10 @@
 import customtkinter as ctk
+import tkintertable as tkt #Weiss noch nicht ob das mit ctk läuft
 import csv
+import CSVWorker as cw
 
+#veraltet
+'''
 def lade_csv_daten():
     try:
         with open("Aircraft.csv", 'r', newline='', encoding='utf-8') as datei:
@@ -13,15 +17,13 @@ def lade_csv_daten():
     except Exception as e:
         print(f"Fehler beim Lesen der Datei: {e}")
         return None
-
-test = lade_csv_daten()
-print (test[0])
+'''
 
 # Flugzeugdaten laden
-dateipfad = 'Aircraft.csv'  #  Dateipfad
-flugzeugdaten = lade_csv_daten(dateipfad) # bleibt drin!!!
+filename = 'Aircraft.csv'  #  Dateipfad
+aircraft_data = cw.import_aircraft(filename)
 
-if flugzeugdaten is None:
+if aircraft_data is None:
     print("Fehler: Konnte die Flugzeugdaten nicht laden.")
     exit()  # Beende das Programm, wenn die Daten nicht geladen werden konnten
 
@@ -30,35 +32,40 @@ class FlugzeugDatenApp(ctk.CTk):
         super().__init__()
         self.title("Wiki")
         self.geometry("800x600")  # Fenster größe
+        self.grid_columnconfigure(0, weight=0)
         self.grid_columnconfigure(1, weight=1)  # Für das Textfeld
+
         self.grid_rowconfigure(0, weight=1)  # Für das Hauptfenster
+        self.grid_rowconfigure(1, weight=1)  # Für das Hauptfenster
 
         self.selected_nation = None
         self.selected_flugzeug = None
-        self.nationen = sorted(list(set(zeile['Nation'] for zeile in flugzeugdaten)))
-        self.flugzeuge_pro_nation = {}
-        for nation in self.nationen:
-            self.flugzeuge_pro_nation[nation] = sorted(
-                list(set(zeile['Flugzeug'] for zeile in flugzeugdaten if zeile['Nation'] == nation)))
+        self.nationen = sorted({flugzeug.nation for flugzeug in aircraft_data})
+        self.flugzeuge_pro_nation = {
+            nation: sorted({flugzeug.name for flugzeug in aircraft_data if flugzeug.nation == nation})
+            for nation in self.nationen
+        }
 
         self.create_widgets()
 
     def create_widgets(self):
         # Linke Seite: Auswahlbereiche
         self.frame_links = ctk.CTkFrame(master=self, width=200)
-        self.frame_links.grid(row=0, column=0, padx=20, pady=20, sticky="nsew")
+        self.frame_links.grid(row=0, column=0, rowspan=2, padx=20, pady=20, sticky="nsew")
 
         self.nationen_label = ctk.CTkLabel(master=self.frame_links,text="Nation auswählen:")
         self.nationen_label.pack(pady=10)
 
         self.nationen_combobox = ctk.CTkComboBox(master=self.frame_links, values=self.nationen,command=self.nation_ausgewaehlt)
         self.nationen_combobox.pack(pady=10)
+        self.nationen_combobox.set('')
 
         self.flugzeuge_label = ctk.CTkLabel(master=self.frame_links, text="Flugzeug auswählen:")
         self.flugzeuge_label.pack(pady=10)
 
         self.flugzeuge_combobox = ctk.CTkComboBox(master=self.frame_links, values=[], state = 'normal', command=self.flugzeug_ausgewaehlt)          #state = normal
         self.flugzeuge_combobox.pack(pady=10)
+        self.flugzeuge_combobox.set('')
 
         self.confirm_button = ctk.CTkButton(master=self.frame_links, text="Bestätigen", command=self.zeige_daten)
         self.confirm_button.pack(pady=20)
@@ -68,18 +75,18 @@ class FlugzeugDatenApp(ctk.CTk):
 
         self.delete_button = ctk.CTkButton(master=self.frame_links, text="Löschen", command=self.delete_entry)
         self.delete_button.pack(pady=10)
-#______________________________________________________________________________________________________________________________Oben: Daten Flugzeug
+#Oben: Daten Flugzeug______________________________________________________________________________________________________________________________
         self.text_area = ctk.CTkTextbox(master=self, width=400, wrap="word")
-        self.text_area.grid(row=1, column=1, padx=20, pady=20, sticky="nsew")
+        self.text_area.grid(row=0, column=1, padx=20, pady=20, sticky="nsew")
         self.text_area.configure(state="disabled")                                 #Damit das Textfeld von anfang an nicht bearbeitet werden kann
-#________________________________________________________________________________________________________________________________Unten: Daten Pylon
+#Unten: Daten Pylon________________________________________________________________________________________________________________________________
         self.text_area_pylon = ctk.CTkTextbox(master=self, width=400, wrap="word")
-        self.text_area_pylon.grid(row=0, column=1, padx=20, pady=20, sticky="nsew")
+        self.text_area_pylon.grid(row=1, column=1, padx=20, pady=20, sticky="nsew")
         self.text_area_pylon.configure(state="disabled")                            #Damit das Textfeld von anfang an nicht bearbeitet werden kann
 #___________________________________________________________________________________________________________________________________________________
     def nation_ausgewaehlt(self, nation):
         self.selected_nation = nation
-        self.flugzeuge_combobox.configure(values=self.flugzeuge_pro_nation.get(nation, []))                                   #Dropdown menü (Nation)
+        self.flugzeuge_combobox.configure(values=self.flugzeuge_pro_nation.get(nation, []))                             #Dropdown menü (Nation)
         self.flugzeuge_combobox.set = None       # Setze die Auswahl zurück
         self.selected_flugzeug = None
         self.text_area.delete("1.0", "end")      # Lösche den Text
@@ -91,10 +98,10 @@ class FlugzeugDatenApp(ctk.CTk):
         self.text_area.configure(state="normal") # Normal: Textfeld kann bearbeitet/aktualisiert werden
         self.text_area.delete("1.0", "end")  # Lösche den alten Text
         if self.selected_nation and self.selected_flugzeug:
-            for zeile in flugzeugdaten:
-                if zeile['Nation'] == self.selected_nation and zeile['Flugzeug'] == self.selected_flugzeug:
+            for zeile in aircraft_data:
+                if zeile.nation == self.selected_nation and zeile.name == self.selected_flugzeug:
                     daten_text = "Daten des Flugzeugs:\n"
-                    for key, value in zeile.items():
+                    for key, value in vars(zeile).items():
                         daten_text += f"- {key}: {value}\n"
                     self.text_area.insert("1.0", daten_text)
                     self.text_area.configure(state="disabled") # disable : read only
@@ -155,7 +162,7 @@ class FlugzeugDatenApp(ctk.CTk):
             self.nation_dropdown.pack(pady=10)
     '''''
 
-    def save_data(self):
+    def save_data(self): #Muss noch für Objekte umgebaut werden
         neue_nation = self.nation_entry.get().strip()
         neues_flugzeug = self.flugzeug_entry.get().strip()
 
@@ -182,7 +189,7 @@ class FlugzeugDatenApp(ctk.CTk):
                 neue_nation = "Unbekannt"  # Setze einen Standardwert für die Nation
                 self.flugzeuge_pro_nation[neue_nation] = []
 
-            flugzeugdaten.append({
+            aircraft_data.append({
                 'Nation': neue_nation,
                 'Flugzeug': neues_flugzeug,
                 'BattleRating': battle_rating,
@@ -204,10 +211,10 @@ class FlugzeugDatenApp(ctk.CTk):
         else:
             self.text_area.insert("1.0", "Bitte gib ein Flugzeug an.")
 #__________________________________________________________________________________________________________________________________________________________
-    def delete_entry(self):
+    def delete_entry(self): #Muss noch für Objekte umgebaut werden
         if self.selected_nation and self.selected_flugzeug:
             # Lösche das Flugzeug aus den Daten
-            flugzeugdaten[:] = [zeile for zeile in flugzeugdaten if not (
+            aircraft_data[:] = [zeile for zeile in aircraft_data if not (
                         zeile['Nation'] == self.selected_nation and zeile['Flugzeug'] == self.selected_flugzeug)]
             self.flugzeuge_pro_nation[self.selected_nation].remove(self.selected_flugzeug)
             self.text_area.insert("1.0",
@@ -218,14 +225,14 @@ class FlugzeugDatenApp(ctk.CTk):
         else:
             self.text_area.insert("1.0", "Bitte wähle eine Nation und ein Flugzeug zum Löschen aus.")
 #__________________________________________________________________________________________________________________________________________________________
-    def save_to_csv(self):
+    def save_to_csv(self): #Muss noch für Objekte umgebaut werden
         try:
-            with open(dateipfad, 'w', newline='', encoding='utf-8') as datei:
+            with open(filename, 'w', newline='', encoding='utf-8') as datei:
                 fieldnames = ['Nation', 'Flugzeug', 'BattleRating', 'Klasse', 'Turnrate', 'Steigrate',
                               'Geschwindigkeit', 'beiHoehe', 'maxHoehe']
                 writer = csv.DictWriter(datei, fieldnames=fieldnames)
                 writer.writeheader()
-                for zeile in flugzeugdaten:
+                for zeile in aircraft_data:
                     writer.writerow(zeile)
             print("Daten erfolgreich gespeichert.")
         except Exception as e:
