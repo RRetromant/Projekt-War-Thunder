@@ -51,6 +51,7 @@ class FlugzeugDatenApp(ctk.CTk):
     def create_widgets(self):
         # Linke Seite: Auswahlbereiche
         self.frame_links = ctk.CTkFrame(master=self, width=200)
+        #Reihe 0 (ganz links), Spalte 0 (ganz oben), Soll über beide Reihen gehen
         self.frame_links.grid(row=0, column=0, rowspan=2, padx=20, pady=20, sticky="nsew")
 
         self.nationen_label = ctk.CTkLabel(master=self.frame_links,text="Nation auswählen:")
@@ -72,9 +73,11 @@ class FlugzeugDatenApp(ctk.CTk):
 
         self.add_button = ctk.CTkButton(master=self.frame_links, text="Add Nation/Flugzeug", command=self.open_add_window)
         self.add_button.pack(pady=10)
+        self.add_button.configure(state="disabled") #Solange wir den CSV Wipe Bug haben
 
         self.delete_button = ctk.CTkButton(master=self.frame_links, text="Löschen", command=self.delete_entry)
         self.delete_button.pack(pady=10)
+        self.delete_button.configure(state="disabled") #Solange wir den CSV Wipe Bug haben
 #Oben: Daten Flugzeug______________________________________________________________________________________________________________________________
         self.text_area = ctk.CTkTextbox(master=self, width=400, wrap="word")
         self.text_area.grid(row=0, column=1, padx=20, pady=20, sticky="nsew")
@@ -86,8 +89,7 @@ class FlugzeugDatenApp(ctk.CTk):
 #___________________________________________________________________________________________________________________________________________________
     def nation_ausgewaehlt(self, nation):
         self.selected_nation = nation
-        self.flugzeuge_combobox.configure(values=self.flugzeuge_pro_nation.get(nation, []))                             #Dropdown menü (Nation)
-        self.flugzeuge_combobox.set = None       # Setze die Auswahl zurück
+        self.flugzeuge_combobox.configure(values=self.flugzeuge_pro_nation.get(nation, []))                             #Dropdown menü (Nation)     # Setze die Auswahl zurück
         self.selected_flugzeug = None
         self.text_area.delete("1.0", "end")      # Lösche den Text
 #____________________________________________________________________________________________________________________________________________________
