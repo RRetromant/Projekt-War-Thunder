@@ -42,6 +42,8 @@ class FlugzeugDatenApp(ctk.CTk):
         self.selected_nation = None
         self.selected_flugzeug = None
         self.nationen = sorted({flugzeug.nation for flugzeug in aircraft_data})
+        #self.nationen_add = self.nationen.copy()
+        #self.nationen_add.append("Neue Nation")
         self.flugzeuge_pro_nation = {
             nation: sorted({flugzeug.name for flugzeug in aircraft_data if flugzeug.nation == nation})
             for nation in self.nationen
@@ -117,10 +119,30 @@ class FlugzeugDatenApp(ctk.CTk):
     def open_add_window(self):
         self.add_window = ctk.CTkToplevel(self)
         self.add_window.title("Add Nation/Flugzeug")
-        self.add_window.geometry("400x500")
+        self.add_window.geometry("400x600")
 
-        self.nation_entry = ctk.CTkEntry(master=self.add_window, placeholder_text="Neue Nation (optional)")
-        self.nation_entry.pack(pady=10)
+        self.grid_columnconfigure(0, weight=0)
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_rowconfigure(1, weight=1)
+
+        '''        self.frame_nation = ctk.CTkFrame(master=self, width=200)
+        self.frame_nation(row=0, column=0, padx=20, pady=20, sticky="nsew")
+
+        self.frame_rest = ctk.CTkFrame(master=self, width=200)
+        self.frame_rest(row=1, column=0, padx = 20, pady = 20, sticky = "nsew")'''
+
+        self.nationen_checklabel = ctk.CTkLabel(master=self.add_window, text="Ist es eine neue Nation?:")
+        self.nationen_checklabel.pack(pady=10)
+
+        self.neue_nation_checker = ctk.CTkOptionMenu(master=self.add_window,
+                                                     values=("ja", "nein"),
+                                                     command=self.neue_nation_checktask)
+
+        self.neue_nation_checker.pack(pady=10)
+        self.neue_nation_checker.set('Bitte auswählen')
+
+
+    def zeige_rest(self):
 
         self.flugzeug_entry = ctk.CTkEntry(master=self.add_window, placeholder_text="Neues Flugzeug")
         self.flugzeug_entry.pack(pady=10)
@@ -149,6 +171,29 @@ class FlugzeugDatenApp(ctk.CTk):
 
         self.confirm_add_button = ctk.CTkButton(master=self.add_window, text="Confirm", command=self.save_data)
         self.confirm_add_button.pack(pady=20)
+
+    def neue_nation_checktask(self, auswahl): #Damit der Button live gecheckt wird
+        if hasattr(self, 'nationen_entry'):
+            self.nationen_entry.destroy()
+            self.flugzeug_entry.destroy()
+            self.battle_rating_entry.destroy()
+            self.klasse_entry.destroy()
+            self.turnrate_entry.destroy()
+            self.steigrate_entry.destroy()
+            self.geschwindigkeit_entry.destroy()
+            self.bei_hoehe_entry.destroy()
+            self.max_hoehe_entry.destroy()
+            self.confirm_add_button.destroy()
+
+        if auswahl == "ja":
+            self.nationen_entry = ctk.CTkEntry(master=self.add_window, placeholder_text="Nation")
+            self.nationen_entry.pack(pady=10)
+            self.zeige_rest()
+        elif auswahl == "nein":
+            self.nationen_entry = ctk.CTkOptionMenu(master=self.add_window, values=self.nationen)
+            self.nationen_entry.pack(pady=10)
+            self.nationen_entry.set('Nation auswählen')
+            self.zeige_rest()
 #___________________________________________________________________________________________________________________________________________________
     '''' 
             # Dropdown-Menü für bestehende Nationen
@@ -166,7 +211,7 @@ class FlugzeugDatenApp(ctk.CTk):
     '''''
 
     def save_data(self):
-        neue_nation = self.nation_entry.get().strip()
+        neue_nation = self.nationen_entry.get().strip()
         neues_flugzeug = self.flugzeug_entry.get().strip()
 
         # Werte für das neue Flugzeug
