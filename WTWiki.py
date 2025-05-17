@@ -35,6 +35,7 @@ if aircraft_data is None:
 class FlugzeugDatenApp(ctk.CTk):
     def __init__(self):
         super().__init__()
+        self.delete_window = None
         self.title("Wiki")
         self.geometry("800x600")  # Fenster größe
         self.grid_columnconfigure(0, weight=0)
@@ -50,6 +51,7 @@ class FlugzeugDatenApp(ctk.CTk):
             nation: sorted({flugzeug.name for flugzeug in aircraft_data if flugzeug.nation == nation})
             for nation in self.nationen
         }
+        self.aircraft = sorted({flugzeug.name for flugzeug in aircraft_data})
 
         self.weapon_types = sorted({weapon.armament_type for weapon in armament_data})
         self.waffen_pro_type = {
@@ -107,10 +109,10 @@ class FlugzeugDatenApp(ctk.CTk):
         self.add_button.pack(pady=10)
         # self.add_button.configure(state="disabled") #Solange wir den CSV Wipe Bug haben
 
-        self.delete_button = ctk.CTkButton(master=self.frame_links, text="Löschen", command=self.delete_entry)
+        self.delete_button = ctk.CTkButton(master=self.frame_links, text="Löschen", command=self.delete_entry_window)
         self.delete_button.pack(pady=10)
-        self.delete_button.configure(state="disabled")  # Solange wir den CSV Wipe Bug haben
-        # Oben: Daten Flugzeug______________________________________________________________________________________________________________________________
+        #self.delete_button.configure(state="disabled") #Solange wir den CSV Wipe Bug haben
+#Oben: Daten Flugzeug______________________________________________________________________________________________________________________________
         self.text_area = ctk.CTkTextbox(master=self, width=400, wrap="word")
         self.text_area.grid(row=0, column=1, padx=20, pady=20, sticky="nsew")
         self.text_area.configure(state="disabled")  # Damit das Textfeld von anfang an nicht bearbeitet werden kann
@@ -143,7 +145,7 @@ class FlugzeugDatenApp(ctk.CTk):
     #___________________________________________________________________________________________________________________________________________________
     def nation_ausgewaehlt(self, nation):
         self.selected_nation = nation
-        self.flugzeuge_combobox.configure(values=self.flugzeuge_pro_nation.get(nation, []))                             #Dropdown menü (Nation)     # Setze die Auswahl zurück
+        self.flugzeuge_combobox.configure(values=self.flugzeuge_pro_nation.get(nation, [])) #(Output)Flugzeuge der ausgewählten nation                             #Dropdown menü (Nation)     # Setze die Auswahl zurück
         self.selected_flugzeug = None
         self.text_area.delete("1.0", "end")      # Lösche den Text
     #____________________________________________________________________________________________________________________________________________________
@@ -156,6 +158,9 @@ class FlugzeugDatenApp(ctk.CTk):
 # ____________________________________________________________________________________________________________________________________________________
     def flugzeug_ausgewaehlt(self, flugzeug):
         self.selected_flugzeug = flugzeug
+
+    def flugzeug_ausgewaehlt_loeschen(self, flugzeug):
+        self.flugzeug_zu_loeschen = flugzeug
 
     def weapon_type_augewählt(self, typ):
         self.selected_weapon_type = typ
@@ -198,8 +203,23 @@ class FlugzeugDatenApp(ctk.CTk):
 
         self.neue_nation_checker.pack(pady=10)
         self.neue_nation_checker.set('Bitte auswählen')
+#________________________________________________________________________________________________________________________________________________________
+    def delete_entry_window(self):
 
+        self.delete_window = ctk.CTkToplevel(self)
+        self.delete_window.title("Löschfenster")
+        self.delete_window.geometry("360x400")
 
+        self.delete_abfrage = ctk.CTkLabel(master=self.delete_window,text = ("Bitte wählen sie einen Flugzeug aus: "))
+        self.delete_abfrage.pack(pady=10)
+
+        self.delete_flugzeug = ctk.CTkOptionMenu(master=self.delete_window, values=self.aircraft, state='normal',command=self.flugzeug_ausgewaehlt_loeschen)  # state = normal
+        self.delete_flugzeug.pack(pady=10)
+        self.delete_flugzeug.set('')
+
+        self.loeschen = ctk.CTkButton(master=self.delete_window, text="Löschen", command=self.delete_auswahl)
+        self.loeschen.pack(pady=10)
+#_________________________________________________________________________________________________________________________________________________________
     def zeige_rest(self):
 
         self.flugzeug_entry = ctk.CTkEntry(master=self.add_window, placeholder_text="Neues Flugzeug")
@@ -229,6 +249,18 @@ class FlugzeugDatenApp(ctk.CTk):
 
         self.confirm_add_button = ctk.CTkButton(master=self.add_window, text="Confirm", command=self.bestaetigen)
         self.confirm_add_button.pack(pady=20)
+
+    def delete_auswahl(self):
+        for entry in aircraft_data:
+            if (entry.name == self.flugzeug_zu_loeschen):
+                aircraft_data.remove(entry)
+                self.text_area.configure(state="normal")
+                self.text_area.delete("1.0", "end")
+                self.text_area.insert("1.0", "Flugzeug gelöscht!.")
+                self.text_area.configure(state="disabled")
+                self.delete_window.destroy()
+
+        cw.export_aircraft(filename,aircraft_data)
 
     def neue_nation_checktask(self, auswahl): #Damit der Button live gecheckt wird
         if hasattr(self, 'nationen_entry'):
@@ -383,7 +415,6 @@ class FlugzeugDatenApp(ctk.CTk):
         except Exception as e:
             print(f"Fehler beim Speichern der Datei: {e}")'''
 #_____________________________________________________________________________________________________________________________________________________________
-
 
 if __name__ == "__main__":
     app = FlugzeugDatenApp()
