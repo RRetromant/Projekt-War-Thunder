@@ -14,7 +14,7 @@ class Armament: #Beinhaltet dumb Bombs, retarded Bombs, und dumb Rockets
     def __init__(self, name, armament_type, projectile_mass, explosive_type, explosive_mass, TNT_equivalent):
         self.name = name
         self.armament_type = armament_type
-        self. projectile_mass = projectile_mass
+        self.projectile_mass = projectile_mass
         self.explosive_type = explosive_type
         self.explosive_mass = explosive_mass
         self.TNT_equivalent = TNT_equivalent
