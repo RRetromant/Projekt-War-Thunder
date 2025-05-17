@@ -121,10 +121,6 @@ class FlugzeugDatenApp(ctk.CTk):
         self.add_window.title("Add Nation/Flugzeug")
         self.add_window.geometry("400x600")
 
-        self.grid_columnconfigure(0, weight=0)
-        self.grid_rowconfigure(0, weight=1)
-        self.grid_rowconfigure(1, weight=1)
-
         '''        self.frame_nation = ctk.CTkFrame(master=self, width=200)
         self.frame_nation(row=0, column=0, padx=20, pady=20, sticky="nsew")
 
@@ -134,9 +130,7 @@ class FlugzeugDatenApp(ctk.CTk):
         self.nationen_checklabel = ctk.CTkLabel(master=self.add_window, text="Ist es eine neue Nation?:")
         self.nationen_checklabel.pack(pady=10)
 
-        self.neue_nation_checker = ctk.CTkOptionMenu(master=self.add_window,
-                                                     values=("ja", "nein"),
-                                                     command=self.neue_nation_checktask)
+        self.neue_nation_checker = ctk.CTkOptionMenu(master=self.add_window,values=("ja", "nein"),command=self.neue_nation_checktask)
 
         self.neue_nation_checker.pack(pady=10)
         self.neue_nation_checker.set('Bitte auswählen')
@@ -169,7 +163,7 @@ class FlugzeugDatenApp(ctk.CTk):
         self.max_hoehe_entry = ctk.CTkEntry(master=self.add_window, placeholder_text="max Höhe")
         self.max_hoehe_entry.pack(pady=5)
 
-        self.confirm_add_button = ctk.CTkButton(master=self.add_window, text="Confirm", command=self.save_data)
+        self.confirm_add_button = ctk.CTkButton(master=self.add_window, text="Confirm", command=self.bestaetigen)
         self.confirm_add_button.pack(pady=20)
 
     def neue_nation_checktask(self, auswahl): #Damit der Button live gecheckt wird
@@ -209,6 +203,38 @@ class FlugzeugDatenApp(ctk.CTk):
 
             self.nation_dropdown.pack(pady=10)
     '''''
+    def bestaetigen(self):
+        """Verarbeitet die Eingabe und fügt die Nation hinzu oder zeigt einen Fehler an."""
+        nation = self.nationen_entry.get()
+        info_flieger = [
+            self.nationen_entry,
+            self.flugzeug_entry,
+            self.battle_rating_entry,
+            self.klasse_entry,
+            self.turnrate_entry,
+            self.steigrate_entry,
+            self.geschwindigkeit_entry,
+            self.bei_hoehe_entry,
+            self.max_hoehe_entry
+            ]
+        print(info_flieger)
+        if not nation:
+            self.text_area.configure(state="normal")
+            self.text_area.delete("1.0", "end")
+            self.text_area.insert("1.0", "Bitte gib den Namen der Nation ein.")
+            self.text_area.configure(state="disabled")
+            self.add_window.destroy()
+            self.open_add_window()
+
+        elif not info_flieger:
+            self.text_area.configure(state="normal")
+            self.text_area.delete("1.0", "end")
+            self.text_area.insert("1.0","Bitte gib zusätzliche Informationen ein.")
+            self.text_area.configure(state="disabled")
+            self.add_window.destroy()
+            self.open_add_window()
+        else:
+            self.save_data()
 
     def save_data(self):
         neue_nation = self.nationen_entry.get().strip()
@@ -232,10 +258,6 @@ class FlugzeugDatenApp(ctk.CTk):
             # Füge das neue Flugzeug zur entsprechenden Nation hinzu
             if neue_nation:
                 self.flugzeuge_pro_nation[neue_nation].append(neues_flugzeug)
-            else:
-                # Wenn keine Nation angegeben ist, füge das Flugzeug einfach hinzu (ohne Nation)
-                neue_nation = "Unbekannt"  # Setze einen Standardwert für die Nation
-                self.flugzeuge_pro_nation[neue_nation] = []
 
             new_airplane = Class_Structure.Airplane(
                 nation=neue_nation,
