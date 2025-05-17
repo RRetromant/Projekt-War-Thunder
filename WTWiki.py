@@ -21,8 +21,12 @@ def lade_csv_daten():
 '''
 
 # Flugzeugdaten laden
-filename = 'Aircraft.csv'  #  Dateipfad
-aircraft_data = cw.import_aircraft(filename)
+filename_aircraft = 'Aircraft.csv'  #  Dateipfad
+filename_armament = 'Armament.csv'
+filename_hardpoint_selected = '' #ändert sich im Laufe des Programms
+filename_hardpoint = f'f{filename_hardpoint_selected}_Hardpoints.csv' #damit es flexibel ist
+aircraft_data = cw.import_aircraft(filename_aircraft)
+armament_data = cw.import_armaments(filename_armament)
 
 if aircraft_data is None:
     print("Fehler: Konnte die Flugzeugdaten nicht laden.")
@@ -42,11 +46,15 @@ class FlugzeugDatenApp(ctk.CTk):
         self.selected_nation = None
         self.selected_flugzeug = None
         self.nationen = sorted({flugzeug.nation for flugzeug in aircraft_data})
-        #self.nationen_add = self.nationen.copy()
-        #self.nationen_add.append("Neue Nation")
         self.flugzeuge_pro_nation = {
             nation: sorted({flugzeug.name for flugzeug in aircraft_data if flugzeug.nation == nation})
             for nation in self.nationen
+        }
+
+        self.weapon_types = sorted({weapon.armament_type for weapon in armament_data})
+        self.waffen_pro_type = {
+            type: sorted({weapon.name for weapon in armament_data if weapon.armament_type == type})
+            for type in self.weapon_types
         }
 
         self.create_widgets()
@@ -57,47 +65,103 @@ class FlugzeugDatenApp(ctk.CTk):
         #Reihe 0 (ganz links), Spalte 0 (ganz oben), Soll über beide Reihen gehen
         self.frame_links.grid(row=0, column=0, rowspan=2, padx=20, pady=20, sticky="nsew")
 
-        self.nationen_label = ctk.CTkLabel(master=self.frame_links,text="Nation auswählen:")
+        self.nationen_label = ctk.CTkLabel(master=self.frame_links, text="Wiki auswählen:")
         self.nationen_label.pack(pady=10)
 
-        self.nationen_combobox = ctk.CTkOptionMenu(master=self.frame_links, values=self.nationen,command=self.nation_ausgewaehlt)
+        self.wiki_checker = ctk.CTkOptionMenu(master=self.frame_links, values=['Flugzeuge', 'Waffen'], state='normal',
+                                                    command=self.choose_wiki)  # state = normal
+        self.wiki_checker.pack(pady=10)
+        self.wiki_checker.set('')
+
+    def choose_wiki(self, auswahl):
+        if hasattr(self, 'nationen_entry'):
+            pass #Dann clear bitte alle Widgets
+        if auswahl == "Flugzeuge":
+            self.create_widgets_flugzeuge()
+        elif auswahl == "Waffen":
+            self.create_widgets_waffen()
+
+
+    def create_widgets_flugzeuge(self):
+        self.nationen_label = ctk.CTkLabel(master=self.frame_links, text="Nation auswählen:")
+        self.nationen_label.pack(pady=10)
+
+        self.nationen_combobox = ctk.CTkOptionMenu(master=self.frame_links, values=self.nationen,
+                                                   command=self.nation_ausgewaehlt)
         self.nationen_combobox.pack(pady=10)
         self.nationen_combobox.set('')
 
         self.flugzeuge_label = ctk.CTkLabel(master=self.frame_links, text="Flugzeug auswählen:")
         self.flugzeuge_label.pack(pady=10)
 
-        self.flugzeuge_combobox = ctk.CTkOptionMenu(master=self.frame_links, values=[], state = 'normal', command=self.flugzeug_ausgewaehlt)          #state = normal
+        self.flugzeuge_combobox = ctk.CTkOptionMenu(master=self.frame_links, values=[], state='normal',
+                                                    command=self.flugzeug_ausgewaehlt)  # state = normal
         self.flugzeuge_combobox.pack(pady=10)
         self.flugzeuge_combobox.set('')
 
         self.confirm_button = ctk.CTkButton(master=self.frame_links, text="Bestätigen", command=self.zeige_daten)
         self.confirm_button.pack(pady=20)
 
-        self.add_button = ctk.CTkButton(master=self.frame_links, text="Add Nation/Flugzeug", command=self.open_add_window)
+        self.add_button = ctk.CTkButton(master=self.frame_links, text="Add Nation/Flugzeug",
+                                        command=self.open_add_window)
         self.add_button.pack(pady=10)
-        #self.add_button.configure(state="disabled") #Solange wir den CSV Wipe Bug haben
+        # self.add_button.configure(state="disabled") #Solange wir den CSV Wipe Bug haben
 
         self.delete_button = ctk.CTkButton(master=self.frame_links, text="Löschen", command=self.delete_entry)
         self.delete_button.pack(pady=10)
-        self.delete_button.configure(state="disabled") #Solange wir den CSV Wipe Bug haben
-#Oben: Daten Flugzeug______________________________________________________________________________________________________________________________
+        self.delete_button.configure(state="disabled")  # Solange wir den CSV Wipe Bug haben
+        # Oben: Daten Flugzeug______________________________________________________________________________________________________________________________
         self.text_area = ctk.CTkTextbox(master=self, width=400, wrap="word")
         self.text_area.grid(row=0, column=1, padx=20, pady=20, sticky="nsew")
-        self.text_area.configure(state="disabled")                                 #Damit das Textfeld von anfang an nicht bearbeitet werden kann
-#Unten: Daten Pylon________________________________________________________________________________________________________________________________
+        self.text_area.configure(state="disabled")  # Damit das Textfeld von anfang an nicht bearbeitet werden kann
+        # Unten: Daten Pylon________________________________________________________________________________________________________________________________
         self.text_area_pylon = ctk.CTkTextbox(master=self, width=400, wrap="word")
         self.text_area_pylon.grid(row=1, column=1, padx=20, pady=20, sticky="nsew")
-        self.text_area_pylon.configure(state="disabled")                            #Damit das Textfeld von anfang an nicht bearbeitet werden kann
-#___________________________________________________________________________________________________________________________________________________
+        self.text_area_pylon.configure(state="disabled")  #Damit das Textfeld von anfang an nicht bearbeitet werden kann
+    #___________________________________________________________________________________________________________________________________________________
+    def create_widgets_waffen(self):
+        self.waffen_label = ctk.CTkLabel(master=self.frame_links, text="Waffentyp auswählen:")
+        self.waffen_label.pack(pady=10)
+
+        self.weapon_type_option = ctk.CTkOptionMenu(master=self.frame_links, values=self.weapon_types, state='normal',
+                                                    command=self.weapon_type_lock)  # state = normal
+        self.weapon_type_option.pack(pady=10)
+        self.weapon_type_option.set('')
+
+        self.flugzeuge_label = ctk.CTkLabel(master=self.frame_links, text="Waffe auswählen:")
+        self.flugzeuge_label.pack(pady=10)
+
+        self.waffen_option = ctk.CTkOptionMenu(master=self.frame_links, values=[], state='normal',
+                                                    command=self.waffe_ausgewählt)  # state = normal
+        self.waffen_option.pack(pady=10)
+        self.waffen_option.set('')
+
+        # Oben: Daten Flugzeug______________________________________________________________________________________________________________________________
+        self.text_area = ctk.CTkTextbox(master=self, width=400, wrap="word")
+        self.text_area.grid(row=0, column=1, rowspan =2,  padx=20, pady=20, sticky="nsew")
+        self.text_area.configure(state="disabled")  # Damit das Textfeld von anfang an nicht bearbeitet werden kann
+    #___________________________________________________________________________________________________________________________________________________
     def nation_ausgewaehlt(self, nation):
         self.selected_nation = nation
         self.flugzeuge_combobox.configure(values=self.flugzeuge_pro_nation.get(nation, []))                             #Dropdown menü (Nation)     # Setze die Auswahl zurück
         self.selected_flugzeug = None
         self.text_area.delete("1.0", "end")      # Lösche den Text
-#____________________________________________________________________________________________________________________________________________________
+    #____________________________________________________________________________________________________________________________________________________
+    def weapon_type_lock(self, type):
+        self.selected_nation = type
+        self.flugzeuge_combobox.configure(values=self.flugzeuge_pro_nation.get(type, []))  # Dropdown menü (Nation)     # Setze die Auswahl zurück
+        self.selected_flugzeug = None
+        self.text_area.delete("1.0", "end")  # Lösche den Text
+
+# ____________________________________________________________________________________________________________________________________________________
     def flugzeug_ausgewaehlt(self, flugzeug):
         self.selected_flugzeug = flugzeug
+
+    def weapon_type_augewählt(self, typ):
+        self.selected_weapon_type = typ
+
+    def waffe_ausgewählt(self, waffe):
+        self.selected_waffe = waffe
 
     def zeige_daten(self):
         self.text_area.configure(state="normal") # Normal: Textfeld kann bearbeitet/aktualisiert werden
@@ -207,18 +271,18 @@ class FlugzeugDatenApp(ctk.CTk):
         """Verarbeitet die Eingabe und fügt die Nation hinzu oder zeigt einen Fehler an."""
         nation = self.nationen_entry.get()
         info_flieger = [
-            self.nationen_entry,
-            self.flugzeug_entry,
-            self.battle_rating_entry,
-            self.klasse_entry,
-            self.turnrate_entry,
-            self.steigrate_entry,
-            self.geschwindigkeit_entry,
-            self.bei_hoehe_entry,
-            self.max_hoehe_entry
+            self.nationen_entry.get(),
+            self.flugzeug_entry.get(),
+            self.battle_rating_entry.get(),
+            self.klasse_entry.get(),
+            self.turnrate_entry.get(),
+            self.steigrate_entry.get(),
+            self.geschwindigkeit_entry.get(),
+            self.bei_hoehe_entry.get(),
+            self.max_hoehe_entry.get()
             ]
         print(info_flieger)
-        if not nation:
+        if not info_flieger[0]: #Eintrag Nation ist leer
             self.text_area.configure(state="normal")
             self.text_area.delete("1.0", "end")
             self.text_area.insert("1.0", "Bitte gib den Namen der Nation ein.")
@@ -226,7 +290,15 @@ class FlugzeugDatenApp(ctk.CTk):
             self.add_window.destroy()
             self.open_add_window()
 
-        elif not info_flieger:
+        elif info_flieger[0] == "Nation auswählen": #Eintrag Nation ist leer
+            self.text_area.configure(state="normal")
+            self.text_area.delete("1.0", "end")
+            self.text_area.insert("1.0", "Bitte gib den Namen der Nation ein.")
+            self.text_area.configure(state="disabled")
+            self.add_window.destroy()
+            self.open_add_window()
+
+        elif any(eintrag == '' for eintrag in info_flieger[1:]):
             self.text_area.configure(state="normal")
             self.text_area.delete("1.0", "end")
             self.text_area.insert("1.0","Bitte gib zusätzliche Informationen ein.")
