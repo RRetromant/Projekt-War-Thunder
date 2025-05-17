@@ -1,7 +1,8 @@
 import customtkinter as ctk
-import tkintertable as tkt #Weiss noch nicht ob das mit ctk läuft
+#import tkintertable as tkt #Weiss noch nicht ob das mit ctk läuft
 import csv
 import CSVWorker as cw
+import Class_Structure
 
 #veraltet
 '''
@@ -73,7 +74,7 @@ class FlugzeugDatenApp(ctk.CTk):
 
         self.add_button = ctk.CTkButton(master=self.frame_links, text="Add Nation/Flugzeug", command=self.open_add_window)
         self.add_button.pack(pady=10)
-        self.add_button.configure(state="disabled") #Solange wir den CSV Wipe Bug haben
+        #self.add_button.configure(state="disabled") #Solange wir den CSV Wipe Bug haben
 
         self.delete_button = ctk.CTkButton(master=self.frame_links, text="Löschen", command=self.delete_entry)
         self.delete_button.pack(pady=10)
@@ -164,7 +165,7 @@ class FlugzeugDatenApp(ctk.CTk):
             self.nation_dropdown.pack(pady=10)
     '''''
 
-    def save_data(self): #Muss noch für Objekte umgebaut werden
+    def save_data(self):
         neue_nation = self.nation_entry.get().strip()
         neues_flugzeug = self.flugzeug_entry.get().strip()
 
@@ -191,20 +192,21 @@ class FlugzeugDatenApp(ctk.CTk):
                 neue_nation = "Unbekannt"  # Setze einen Standardwert für die Nation
                 self.flugzeuge_pro_nation[neue_nation] = []
 
-            aircraft_data.append({
-                'Nation': neue_nation,
-                'Flugzeug': neues_flugzeug,
-                'BattleRating': battle_rating,
-                'Klasse': klasse,
-                'Turnrate': turnrate,
-                'Steigrate': steigrate,
-                'Geschwindigkeit': geschwindigkeit,
-                'beiHoehe': bei_hoehe,
-                'maxHoehe': max_hoehe
-            })
+            new_airplane = Class_Structure.Airplane(
+                nation=neue_nation,
+                name=neues_flugzeug,
+                battlerating=battle_rating,
+                plane_type=klasse,
+                turnrate=turnrate,
+                climbrate=steigrate,
+                speed=geschwindigkeit,
+                speedheight=bei_hoehe,
+                maxheight=max_hoehe
+            )
+            aircraft_data.append(new_airplane)
 
             # Speichere die neuen Daten in der CSV-Datei
-            self.save_to_csv()
+            cw.export_aircraft(filename, aircraft_data)
 
             # Schließe das Add-Fenster
             self.add_window.destroy()
@@ -221,12 +223,14 @@ class FlugzeugDatenApp(ctk.CTk):
             self.flugzeuge_pro_nation[self.selected_nation].remove(self.selected_flugzeug)
             self.text_area.insert("1.0",
                                   f"Flugzeug '{self.selected_flugzeug}' aus '{self.selected_nation}' gelöscht.\n")
-            self.save_to_csv()  # Speichere die Änderungen
+            cw.export_aircraft(filename, aircraft_data)  # Speichere die Änderungen
             self.flugzeuge_combobox.configure(
                 values=self.flugzeuge_pro_nation[self.selected_nation])  # Aktualisiere die Combobox
         else:
             self.text_area.insert("1.0", "Bitte wähle eine Nation und ein Flugzeug zum Löschen aus.")
 #__________________________________________________________________________________________________________________________________________________________
+#Der Part wurde ersetzt durch cw.export_Aircraft
+'''
     def save_to_csv(self): #Muss noch für Objekte umgebaut werden
         try:
             with open(filename, 'w', newline='', encoding='utf-8') as datei:
@@ -238,7 +242,7 @@ class FlugzeugDatenApp(ctk.CTk):
                     writer.writerow(zeile)
             print("Daten erfolgreich gespeichert.")
         except Exception as e:
-            print(f"Fehler beim Speichern der Datei: {e}")
+            print(f"Fehler beim Speichern der Datei: {e}")'''
 #_____________________________________________________________________________________________________________________________________________________________
 
 
