@@ -1,34 +1,13 @@
-from symbol import parameters
-
 import customtkinter as ctk
 #import tkintertable as tkt #Weiss noch nicht ob das mit ctk läuft
-import csv
-
-
 import CSVWorker as cw
 import Class_Structure
-
-#veraltet
-'''
-def lade_csv_daten():
-    try:
-        with open("Aircraft.csv", 'r', newline='', encoding='utf-8') as datei:
-            reader = csv.DictReader(datei)
-            daten = list(reader)
-            return daten
-    except FileNotFoundError:
-        print(f"Fehler: Die Datei Aircraft.csv wurde nicht gefunden.")
-        return None
-    except Exception as e:
-        print(f"Fehler beim Lesen der Datei: {e}")
-        return None
-'''
 
 # Flugzeugdaten laden
 filename_aircraft = 'Aircraft.csv'  #  Dateipfad
 filename_armament = 'Armament.csv'
 filename_hardpoint_selected = '' #ändert sich im Laufe des Programms
-filename_hardpoint = f'f{filename_hardpoint_selected}_Hardpoints.csv' #damit es flexibel ist
+filename_hardpoint = f'{filename_hardpoint_selected}_Hardpoints.csv' #damit es flexibel ist
 aircraft_data = cw.import_aircraft(filename_aircraft)
 armament_data = cw.import_armaments(filename_armament)
 
@@ -54,6 +33,19 @@ class FlugzeugDatenApp(ctk.CTk):
 
         self.update_parameters()
         self.create_widgets()
+
+    def update_filename_hardpoint(self, flugzeug):
+        filename_hardpoint_selected = flugzeug
+        filename_hardpoint = f'{filename_hardpoint_selected}_Hardpoints.csv'
+
+        try:
+            hardpoint_data = cw.import_hardpoints(filename_hardpoint)
+            hardpoint_data_string = ""
+            for i in hardpoint_data:
+                hardpoint_data_string += (f'{i.amount}, {i.name}, {i.pylon_ges_anz}, {i.pylon_bool}, \n')
+            return hardpoint_data_string
+        except:
+            return None
 
     def update_parameters(self):
         print("update_parameters")
@@ -90,6 +82,7 @@ class FlugzeugDatenApp(ctk.CTk):
             pass #Dann clear bitte alle Widgets
         if auswahl == "Flugzeuge":
             self.create_widgets_flugzeuge()
+
         elif auswahl == "Waffen":
             self.create_widgets_waffen()
 
@@ -155,9 +148,9 @@ class FlugzeugDatenApp(ctk.CTk):
         self.confirm_button = ctk.CTkButton(master=self.frame_links, text="Bestätigen", command=self.zeige_waffen_daten)
         self.confirm_button.pack(pady=20)
 
-        self.add_button = ctk.CTkButton(master=self.frame_links, text="Add Armament",
-                                        command=self.open_add_aircraft)
-        self.add_button.pack(pady=10)
+        self.add_button_waffen = ctk.CTkButton(master=self.frame_links, text="Add Armament",command=self.open_edit_aircraft)
+        self.add_button_waffen.pack(pady=10)
+        self.add_button_waffen.configure(state="disabled")
 
         self.edit_button = ctk.CTkButton(master=self.frame_links, text="Edit Armament",
                                          command=self.open_edit_aircraft)
@@ -198,7 +191,18 @@ class FlugzeugDatenApp(ctk.CTk):
     def zeige_flugzeug_daten(self):
         self.text_area.configure(state="normal") # Normal: Textfeld kann bearbeitet/aktualisiert werden
         self.text_area.delete("1.0", "end")  # Lösche den alten Text
+
         if self.selected_nation and self.selected_flugzeug:
+            #Hardpoint Anzeige
+            self.text_area_pylon.configure(state="normal")
+            self.text_area_pylon.delete("1.0", "end")
+            hardpoint_data = self.update_filename_hardpoint(self.selected_flugzeug)
+            if hardpoint_data:
+                self.text_area_pylon.insert("1.0", hardpoint_data)
+            self.text_area_pylon.configure(state="disabled")
+
+
+            #Flugzeugdaten
             for zeile in aircraft_data:
                 if zeile.nation == self.selected_nation and zeile.name == self.selected_flugzeug:
                     daten_text = "Daten des Flugzeugs:\n"
@@ -233,7 +237,7 @@ class FlugzeugDatenApp(ctk.CTk):
     def open_add_aircraft(self):
         self.add_window = ctk.CTkToplevel(self)
         self.add_window.title("Add Nation/Flugzeug")
-        self.add_window.geometry("400x600")
+        self.add_window.geometry("400x650")
 
         self.nationen_checklabel = ctk.CTkLabel(master=self.add_window, text="Ist es eine neue Nation?:")
         self.nationen_checklabel.pack(pady=10)
@@ -278,6 +282,12 @@ class FlugzeugDatenApp(ctk.CTk):
         self.confirm_add_button.configure(command=self.bestaetigen)
         self.confirm_add_button.pack(pady=20)
 
+    def select_edit_aircraft(self, auswahl):
+        self.flugzeug_ausgewaehlt(auswahl)
+        self.nationen_entry.configure(#pack die info rein)
+        self.flugzeug_entry.configure()
+        #und das für jede Zeile
+
     def edit_aircraft(self):
         self.open_aircraft_structure()
         self.confirm_add_button.configure(command=self.edit_bestaetigen)
@@ -300,23 +310,36 @@ class FlugzeugDatenApp(ctk.CTk):
             self.text_area.delete("1.0", "end")
             self.text_area.insert("1.0", "Bitte gib den Namen der Nation ein.")
             self.text_area.configure(state="disabled")
-            self.open_aircraft_structure.destroy()
+            #self.open_aircraft_structure.destroy()
 
         elif info_flieger[0] == "Nation auswählen": #Eintrag Nation ist leer
             self.text_area.configure(state="normal")
             self.text_area.delete("1.0", "end")
             self.text_area.insert("1.0", "Bitte gib den Namen der Nation ein.")
             self.text_area.configure(state="disabled")
-            self.open_aircraft_structure.destroy()
+            #self.open_aircraft_structure.destroy()
 
         elif any(eintrag == '' for eintrag in info_flieger[1:]):
             self.text_area.configure(state="normal")
             self.text_area.delete("1.0", "end")
             self.text_area.insert("1.0","Bitte gib zusätzliche Informationen ein.")
             self.text_area.configure(state="disabled")
-            self.open_aircraft_structure.destroy()
+            #self.open_aircraft_structure.destroy()
         else:
-            self.save_data()
+            for entry in aircraft_data:
+                if (entry.name == self.selected_flugzeug):
+                    entry.nation = entry.nation
+                    entry.name = self.flugzeug_entry.get()
+                    entry.battlerating = self.battle_rating_entry.get()
+                    entry.plane_type = self.klasse_entry.get()
+                    entry.turnrate = self.turnrate_entry.get()
+                    entry.climbrate = self.steigrate_entry.get()
+                    entry.speed = self.geschwindigkeit_entry.get()
+                    entry.speedheight = self.bei_hoehe_entry.get()
+                    entry.maxheight = self.max_hoehe_entry.get()
+            cw.export_aircraft(filename_aircraft, aircraft_data)
+            self.update_parameters()
+            self.add_window.destroy()
 
     def delete_aircraft(self):
         for entry in aircraft_data:
@@ -342,6 +365,8 @@ class FlugzeugDatenApp(ctk.CTk):
             self.bei_hoehe_entry.destroy()
             self.max_hoehe_entry.destroy()
             self.confirm_add_button.destroy()
+            self.anfrage_armament_text.destroy()
+            self.anfrage_armament.destroy()
 
         if auswahl == "ja":
             self.nationen_entry = ctk.CTkEntry(master=self.add_window, placeholder_text="Nation")
@@ -353,20 +378,6 @@ class FlugzeugDatenApp(ctk.CTk):
             self.nationen_entry.set('Nation auswählen')
             self.add_aircraft()
 #___________________________________________________________________________________________________________________________________________________
-    '''' 
-            # Dropdown-Menü für bestehende Nationen
-            self.nationen = self.flugzeugdaten()
-            self.selected_nation = ctk.StringVar(value=self.nationen[0] if self.nationen else "Keine Nationen verfügbar")
-
-            self.nation_dropdown = ctk.CTkOptionMenu(
-                master=self.add_window,
-                variable=self.selected_nation,
-                values=self.nationen + ["Neue Nation hinzufügen"],
-                command=self.on_nation_select
-            )
-
-            self.nation_dropdown.pack(pady=10)
-    '''''
     def bestaetigen(self):
         """Verarbeitet die Eingabe und fügt die Nation hinzu oder zeigt einen Fehler an."""
         nation = self.nationen_entry.get()
@@ -405,11 +416,24 @@ class FlugzeugDatenApp(ctk.CTk):
             self.text_area.configure(state="disabled")
             self.add_window.destroy()
             self.open_add_aircraft()
+
+        elif self.confirm_add_hardpoints == "Error":
+            self.text_area.configure(state="normal")
+            self.text_area.delete("1.0", "end")
+            self.text_area.insert("1.0", "Bitte gib zusätzliche Informationen ein.")
+            self.text_area.configure(state="disabled")
+            self.add_window.destroy()
+            self.open_add_aircraft()
+
         else:
+            self.info_flieger = info_flieger
             self.save_data()
+            if self.confirm_add_hardpoints == True:
+                self.open_add_hardpoints()
 
     def save_data(self):
-        neue_nation = self.nationen_entry.get().strip()
+        if self.nationen_entry:
+            neue_nation = self.nationen_entry.get().strip()
         neues_flugzeug = self.flugzeug_entry.get().strip()
         # Werte für das neue Flugzeug
         battle_rating = self.battle_rating_entry.get().strip()
@@ -427,8 +451,8 @@ class FlugzeugDatenApp(ctk.CTk):
                 self.flugzeuge_pro_nation[neue_nation] = []
 
             # Füge das neue Flugzeug zur entsprechenden Nation hinzu
-            if neue_nation:
-                self.flugzeuge_pro_nation[neue_nation].append(neues_flugzeug)
+                if neue_nation:
+                    self.flugzeuge_pro_nation[neue_nation].append(neues_flugzeug)
 
             existing = False
             for entry in aircraft_data:
@@ -438,17 +462,20 @@ class FlugzeugDatenApp(ctk.CTk):
 
             if existing == False:
                 new_airplane = Class_Structure.Airplane(
-                    nation=neue_nation,
-                    name=neues_flugzeug,
-                    battlerating=battle_rating,
-                    plane_type=klasse,
-                    turnrate=turnrate,
-                    climbrate=steigrate,
-                    speed=geschwindigkeit,
-                    speedheight=bei_hoehe,
-                    maxheight=max_hoehe
+                    nation=self.info_flieger[0],
+                    name=self.info_flieger[1],
+                    battlerating=self.info_flieger[2],
+                    plane_type=self.info_flieger[3],
+                    turnrate=self.info_flieger[4],
+                    climbrate=self.info_flieger[5],
+                    speed= self.info_flieger[6],
+                    speedheight=self.info_flieger[7],
+                    maxheight=self.info_flieger[8]
                 )
                 aircraft_data.append(new_airplane)
+            elif existing == True:
+                pass
+
             # Speichere die neuen Daten in der CSV-Datei
             cw.export_aircraft(filename_aircraft, aircraft_data)
             self.update_parameters()
@@ -513,16 +540,17 @@ if __name__ == "__main__":
 - zeige_flugzeug_daten #duh
 - zeige_waffen_daten    #duh
 - open_add_aircraft                 #Fenster zum hinzufügen von Flugzeugen, hat nur die Abfrage der Nation drin
+- open_add_hardpoints
 ### open_weapon_structure
 ### open_add_weapon
 ### open_edit_weapon
 ### delete_weapon_window
 - open_delete_aircraft              #Fenster zum löschen von Flugzeugen und Nationen
-- open_edit_aircraft                #Fenster zum editieren von Flugzeugen                 Hi :) o3o 
-- open_aircraft_structure           #Struktur für adden und editieren, enthält die Entrys
-- open_edit_armament_window
-- add_aircraft
-- edit_aircraft
+- open_edit_aircraft                #Öffnet das Fenster zum editieren, nur mit der Info welches Flugzeug ausgewählt werden soll                 Hi :) o3o 
+- open_aircraft_structure           #Struktur für adden und editieren, enthält die Entrys für alle Stats
+### open_edit_armament_window
+- add_aircraft                      
+- edit_aircraft                     #Fenster zum editieren von Flugzeugen
 - edit_bestaetigen
 - delete_aircraft
 - neue_nation_checktask
