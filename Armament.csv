@@ -2,7 +2,7 @@ Name,Type,Projectile-Masse,Guidance,Aspect,Lock-range-in-rear-aspect,Lock-range-
 100 kg FAB-100sv,dumb bombs,103.5 kg,,,,,FALSE,,,,,TNT,36 kg,36 kg
 100 kg OFAB-100,retarded bombs,114 kg,,,,,FALSE,,,,,TNT,38 kg,38 kg
 1000 lb LDGP Mk 83,dumb bombs,446.205 kg,,,,,FALSE,,,,,Comp.H6,201.8 kg,272.4 kg
-2000 lb LDGP Mk 84,dumb bombs,907.1847 kg,,,,,FALSE,,,,,Comp. H6,428.6 kg,578.6 kg
+2000 lb LDGP Mk 84,retarded bombs,907.1847 kg,,,,,FALSE,,,,,Comp. H6,428.6 kg,578.6 kg
 25 kg AO-25M-1,AO-25M-1,25.5 kg,,,,,FALSE,,,,,TNT,3.7 kg,3.7 kg
 250 kg FAB-250M-54,AO-25M-1,236 kg,,,,,FALSE,,,,,TNT,97 kg,97 kg
 250 kg FAB-250M-62,AO-25M-1,227 kg,,,,,FALSE,,,,,TGAF-5,100 kg,160 kg
