@@ -1,5 +1,5 @@
 import customtkinter as ctk
-#import tkintertable as tkt #Weiss noch nicht ob das mit ctk läuft
+#import tkintertable as tkt #Weiss noch nicht ob das mit ctk läuft kjhfdjhvkgftra
 import CSVWorker as cw
 import Class_Structure
 
