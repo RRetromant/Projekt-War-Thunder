@@ -495,7 +495,7 @@ class FlugzeugDatenApp(ctk.CTk):
         cw.export_aircraft(filename_aircraft,aircraft_data)
         self.update_parameters()
 
-    def neue_nation_checktask(self, auswahl): #Damit der Button live gecheckt wird
+    def neue_nation_checktask(self, auswahl): #Damit der Button live gecheckt wird lol
         if hasattr(self, 'nationen_entry'):
             self.nationen_entry.destroy()
             self.flugzeug_entry.destroy()
