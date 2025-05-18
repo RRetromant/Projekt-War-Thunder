@@ -4,7 +4,6 @@ import customtkinter as ctk
 #import tkintertable as tkt #Weiss noch nicht ob das mit ctk läuft
 import csv
 
-from Tools.scripts.mailerdaemon import emparse_list_from
 
 import CSVWorker as cw
 import Class_Structure
@@ -57,6 +56,8 @@ class FlugzeugDatenApp(ctk.CTk):
         self.create_widgets()
 
     def update_parameters(self):
+        print("update_parameters")
+        self.nationen = None
         self.nationen = sorted({flugzeug.nation for flugzeug in aircraft_data})
         self.flugzeuge_pro_nation = {
             nation: sorted({flugzeug.name for flugzeug in aircraft_data if flugzeug.nation == nation})
@@ -80,7 +81,7 @@ class FlugzeugDatenApp(ctk.CTk):
         self.nationen_label.pack(pady=10)
 
         self.wiki_checker = ctk.CTkOptionMenu(master=self.frame_links, values=['Flugzeuge', 'Waffen'], state='normal',
-                                                    command=self.choose_wiki)  # state = normal
+                                              command=self.choose_wiki)  # state = normal
         self.wiki_checker.pack(pady=10)
         self.wiki_checker.set('')
 
@@ -94,6 +95,7 @@ class FlugzeugDatenApp(ctk.CTk):
 
 
     def create_widgets_flugzeuge(self):
+
         self.nationen_label = ctk.CTkLabel(master=self.frame_links, text="Nation auswählen:")
         self.nationen_label.pack(pady=10)
 
@@ -114,7 +116,7 @@ class FlugzeugDatenApp(ctk.CTk):
         self.confirm_button.pack(pady=20)
 
         self.add_button = ctk.CTkButton(master=self.frame_links, text="Add Nation/Flugzeug",
-                                        command=self.open_add_window)
+                                        command=self.open_add_aircraft)
         self.add_button.pack(pady=10)
 
         self.edit_button =ctk.CTkButton(master=self.frame_links,text="Edit Nation/Flugzeug",command = self.open_edit_aircraft)
@@ -122,6 +124,7 @@ class FlugzeugDatenApp(ctk.CTk):
 
         self.delete_button = ctk.CTkButton(master=self.frame_links, text="Löschen", command=self.open_delete_aircraft)
         self.delete_button.pack(pady=10)
+
 
 #Oben: Daten Flugzeug______________________________________________________________________________________________________________________________
         self.text_area = ctk.CTkTextbox(master=self, width=400, wrap="word")
@@ -433,7 +436,7 @@ class FlugzeugDatenApp(ctk.CTk):
                     existing = True
                     pass #dann kein append
 
-            if existing == True:
+            if existing == False:
                 new_airplane = Class_Structure.Airplane(
                     nation=neue_nation,
                     name=neues_flugzeug,
@@ -447,7 +450,8 @@ class FlugzeugDatenApp(ctk.CTk):
                 )
                 aircraft_data.append(new_airplane)
             # Speichere die neuen Daten in der CSV-Datei
-            cw.export_aircraft(filename, aircraft_data)
+            cw.export_aircraft(filename_aircraft, aircraft_data)
+            self.update_parameters()
 
             # Schließe das Add-Fenster
             self.add_window.destroy()
@@ -467,6 +471,7 @@ class FlugzeugDatenApp(ctk.CTk):
             cw.export_aircraft(filename, aircraft_data)  # Speichere die Änderungen
             self.flugzeuge_combobox.configure(
                 values=self.flugzeuge_pro_nation[self.selected_nation])  # Aktualisiere die Combobox
+            self.update_parameters()
         else:
             self.text_area.insert("1.0", "Bitte wähle eine Nation und ein Flugzeug zum Löschen aus.")
 #__________________________________________________________________________________________________________________________________________________________
@@ -508,13 +513,13 @@ if __name__ == "__main__":
 - zeige_flugzeug_daten #duh
 - zeige_waffen_daten    #duh
 - open_add_aircraft                 #Fenster zum hinzufügen von Flugzeugen, hat nur die Abfrage der Nation drin
-- open_weapon_structure
-- open_add_weapon
-- open_edit_weapon
-- delete_weapon_window
+### open_weapon_structure
+### open_add_weapon
+### open_edit_weapon
+### delete_weapon_window
 - open_delete_aircraft              #Fenster zum löschen von Flugzeugen und Nationen
-- open_edit_aircraft                #Fenster zum editieren von Flugzeugen                 Hi :) o3o
-- open_aircraft_structure   
+- open_edit_aircraft                #Fenster zum editieren von Flugzeugen                 Hi :) o3o 
+- open_aircraft_structure           #Struktur für adden und editieren, enthält die Entrys
 - open_edit_armament_window
 - add_aircraft
 - edit_aircraft
