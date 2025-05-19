@@ -49,74 +49,80 @@ def import_armaments(filename):  #BUG: Spuckt auch alles aus, was keinen Type ha
     with open(filename) as csvfile:
         armament_reader = csv.DictReader(csvfile, delimiter=',')
         for row in armament_reader:
-            if row['Type'] in ('dumb bombs', 'retarded bombs',
-                               'dumb rockets'):  #dann nur werte, die die Klasse Armament braucht
-                armament = Class_Structure.Armament(
-                    name=row['Name'],
-                    armament_type=row['Type'],
-                    projectile_mass=row['Projectile-Masse'],
-                    explosive_type=row['Explosive-Type'],
-                    explosive_mass=row['Explosive-Mass'],
-                    TNT_equivalent=row['TNT-equivalent'],
-                )
-                armament_list.append(armament)
-
-            if row['Type'] in ('guided bombs',):
-                armament = Class_Structure.WeaponGuided(
-                    name=row['Name'],
-                    armament_type=row['Type'],
-                    projectile_mass=row['Projectile-Masse'],
-                    explosive_type=row['Explosive-Type'],
-                    explosive_mass=row['Explosive-Mass'],
-                    TNT_equivalent=row['TNT-equivalent'],
-                    guidance=row['Guidance'],
-                    missile_guidance_time=row['Missile-guidance-time']
-                )
-                armament_list.append(armament)
-
-            if row['Type'] in ('Air-to-Ground',):
-                armament = Class_Structure.AirToGroundRocketGuided(
-                    name=row['Name'],
-                    armament_type=row['Type'],
-                    projectile_mass=row['Projectile-Masse'],
-                    explosive_type=row['Explosive-Type'],
-                    explosive_mass=row['Explosive-Mass'],
-                    TNT_equivalent=row['TNT-equivalent'],
-                    guidance=row['Guidance'],
-                    missile_guidance_time=row['Missile-guidance-time'],
-                    launch_range=row['Launch-range'],
-                    maxspeed=row['Maximum-speed'],
-                )
-                armament_list.append(armament)
-
-            if row['Type'] in ('Air-to-Air',):
-                armament = Class_Structure.AirToAirRocket(
-                    name=row['Name'],
-                    armament_type=row['Type'],
-                    projectile_mass=row['Projectile-Masse'],
-                    explosive_type=row['Explosive-Type'],
-                    explosive_mass=row['Explosive-Mass'],
-                    TNT_equivalent=row['TNT-equivalent'],
-                    guidance=row['Guidance'],
-                    missile_guidance_time=row['Missile-guidance-time'],
-                    launch_range=row['Launch-range'],
-                    maxspeed=row['Maximum-speed'],
-                    aspect=row['Aspect'],
-                    lock_range=row['Lock-range-in-all-aspect'],
-                    lock_range_rear=row['Lock-range-in-rear-aspect'],
-                    maxg_overload=row['Maximum-Overload']
-                )
-                armament_list.append(armament)
-
-            if row['Type'] in ('other'):
-                armament = Class_Structure.Other_Armament(
-                    name=row['Name'],
-                    armament_type=row['Type'],
-                    projectile_mass=row['Projectile-Masse'],
-                )
-                armament_list.append(armament)
+            next_entry = add_armament(row)
+            if next_entry is not None:
+                armament_list.append(next_entry)
 
     return armament_list
+
+def add_armament(row):
+    if row['Type'] in ('dumb bombs', 'retarded bombs',
+                       'dumb rockets'):  #dann nur werte, die die Klasse Armament braucht
+        armament = Class_Structure.Armament(
+            name=row['Name'],
+            armament_type=row['Type'],
+            projectile_mass=row['Projectile-Masse'],
+            explosive_type=row['Explosive-Type'],
+            explosive_mass=row['Explosive-Mass'],
+            TNT_equivalent=row['TNT-equivalent'],
+        )
+        return armament
+
+    if row['Type'] in ('guided bombs'):
+        armament = Class_Structure.WeaponGuided(
+            name=row['Name'],
+            armament_type=row['Type'],
+            projectile_mass=row['Projectile-Masse'],
+            explosive_type=row['Explosive-Type'],
+            explosive_mass=row['Explosive-Mass'],
+            TNT_equivalent=row['TNT-equivalent'],
+            guidance=row['Guidance'],
+            missile_guidance_time=row['Missile-guidance-time']
+        )
+        return armament
+
+    if row['Type'] in ('Air-to-Ground'):
+        armament = Class_Structure.AirToGroundRocketGuided(
+            name=row['Name'],
+            armament_type=row['Type'],
+            projectile_mass=row['Projectile-Masse'],
+            explosive_type=row['Explosive-Type'],
+            explosive_mass=row['Explosive-Mass'],
+            TNT_equivalent=row['TNT-equivalent'],
+            guidance=row['Guidance'],
+            missile_guidance_time=row['Missile-guidance-time'],
+            launch_range=row['Launch-range'],
+            maxspeed=row['Maximum-speed'],
+        )
+        return armament
+
+    if row['Type'] in ('Air-to-Air'):
+        armament = Class_Structure.AirToAirRocket(
+            name=row['Name'],
+            armament_type=row['Type'],
+            projectile_mass=row['Projectile-Masse'],
+            explosive_type=row['Explosive-Type'],
+            explosive_mass=row['Explosive-Mass'],
+            TNT_equivalent=row['TNT-equivalent'],
+            guidance=row['Guidance'],
+            missile_guidance_time=row['Missile-guidance-time'],
+            launch_range=row['Launch-range'],
+            maxspeed=row['Maximum-speed'],
+            aspect=row['Aspect'],
+            lock_range=row['Lock-range-in-all-aspect'],
+            lock_range_rear=row['Lock-range-in-rear-aspect'],
+            maxg_overload=row['Maximum-Overload']
+        )
+        return armament
+
+    if row['Type'] in ('other'):
+        armament = Class_Structure.Other_Armament(
+            name=row['Name'],
+            armament_type=row['Type'],
+            projectile_mass=row['Projectile-Masse'],
+        )
+        return armament
+    return None
 
 
 #Der hier ist mit Vorsicht zu geniessen, da ich nicht weiss wie das mit den ganzen leeren Feldern läuft.

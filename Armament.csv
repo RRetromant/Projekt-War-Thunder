@@ -3,19 +3,19 @@ Name,Type,Projectile-Masse,Guidance,Aspect,Lock-range-in-rear-aspect,Lock-range-
 100 kg OFAB-100,retarded bombs,114 kg,,,,,FALSE,,,,,TNT,38 kg,38 kg
 1000 lb LDGP Mk 83,dumb bombs,446.205 kg,,,,,FALSE,,,,,Comp.H6,201.8 kg,272.4 kg
 2000 lb LDGP Mk 84,retarded bombs,907.1847 kg,,,,,FALSE,,,,,Comp. H6,428.6 kg,578.6 kg
-25 kg AO-25M-1,AO-25M-1,25.5 kg,,,,,FALSE,,,,,TNT,3.7 kg,3.7 kg
-250 kg FAB-250M-54,AO-25M-1,236 kg,,,,,FALSE,,,,,TNT,97 kg,97 kg
-250 kg FAB-250M-62,AO-25M-1,227 kg,,,,,FALSE,,,,,TGAF-5,100 kg,160 kg
-250 kg FAB-250sv,AO-25M-1,252.2 kg,,,,,FALSE,,,,,TNT,122.3 kg,122.3 kg
+25 kg AO-25M-1,dumb bombs,25.5 kg,,,,,FALSE,,,,,TNT,3.7 kg,3.7 kg
+250 kg FAB-250M-54,dumb bombs,236 kg,,,,,FALSE,,,,,TNT,97 kg,97 kg
+250 kg FAB-250M-62,dumb bombs,227 kg,,,,,FALSE,,,,,TGAF-5,100 kg,160 kg
+250 kg FAB-250sv,dumb bombs,252.2 kg,,,,,FALSE,,,,,TNT,122.3 kg,122.3 kg
 250 kg OFAB-250-270,retarded bombs,268 kg,,,,,FALSE,,,,,TNT,94 kg,94 kg
 250 kg OFAB-250Sh,retarded bombs,275 kg,,,,,FALSE,,,,,TG-20,99 kg,131.7 kg
-250 lb LDGP Mk 81,AO-25M-1,117.934 kg,,,,,FALSE,,,,,Comp. H6,45.4 kg,61.3 kg
-50 kg FAB-50sv,AO-25M-1,49.8 kg,,,,,FALSE,,,,,TNT,26.4 kg,26.4 kg
-500 Ib LDGP Mk 82,AO-25M-1,240.858 kg,,,,,FALSE,,,,,Comp. H6,87.1 kg,117.6 kg
+250 lb LDGP Mk 81,dumb bombs,117.934 kg,,,,,FALSE,,,,,Comp. H6,45.4 kg,61.3 kg
+50 kg FAB-50sv,dumb bombs,49.8 kg,,,,,FALSE,,,,,TNT,26.4 kg,26.4 kg
+500 Ib LDGP Mk 82,dumb bombs,240.858 kg,,,,,FALSE,,,,,Comp. H6,87.1 kg,117.6 kg
 500 Ib Mk 82 Snakeye,retarded bombs,226.796 kg,,,,,FALSE,,,,,Comp. H6,87.1 kg,117.6 kg
-500 kg FAB-500M-54,AO-25M-1,478 kg,,,,,FALSE,,,,,TNT,201 kg,201 kg
-500 kg FAB-500M-62,AO-25M-1,508.3 kg,,,,,FALSE,,,,,TGAF-5,213 kg,340.8 kg
-500 kg FAB-500Sh,AO-25M-1,515 kg,,,,,FALSE,,,,,TGAF-5,226.6 kg,362.6 kg
+500 kg FAB-500M-54,dumb bombs,478 kg,,,,,FALSE,,,,,TNT,201 kg,201 kg
+500 kg FAB-500M-62,dumb bombs,508.3 kg,,,,,FALSE,,,,,TGAF-5,213 kg,340.8 kg
+500 kg FAB-500Sh,dumb bombs,515 kg,,,,,FALSE,,,,,TGAF-5,226.6 kg,362.6 kg
 500 lb AN-M64A1,dumb bombs,535 lb,,,,,FALSE,,,,,Composition B,124.3 kg,162.8 kg
 500 lb Mk 82 Snakeye,retarded bombs,254.012 kg,,,,,FALSE,,,,,Comp. H6,87.1 kg,117.6 kg
 1000 lb AN-M65A1,dumb bombs,"1,104 lb",<null>,<null>,<null>,<null>,FALSE,<null>,<null>,<null>,<null>,Tritonal,269.9 kg,318.5 kg
@@ -61,8 +61,8 @@ R-60M,Air-to-Air,44 kg,IR,All-aspect,7.4 km,2 km,FALSE,10 km,2.5 km,30 G,25 s,OK
 R-73,Air-to-Air,105 kg,IR,All-aspects,11 km,3.4 km,TRUE,30 km,2.5 M,40 G,20 s,OKFOL,3.8 kg,6.1 kg
 R-73E,Air-to-Air,105 kg,IR,All-aspects,11 km,3.4 km,TRUE,30 km,2.5 M,40 G,20 s,OKFOL,3.8 kg,6.1 kg
 R-27ER,Air-to-Air,350 kg,SARH+IOG,Front-aspect,,,FALSE,100 km,5.8 M,35 G,60 s,TGAF-5,15 kg,24 kg
-RBS-132,Armor-piercing shell,51.6 kg,,,,,FALSE,,,,,TNT,1.4 kg,1.4 kg
-RBS-82,Armor-piercing shell,15 kg,,,,,FALSE,,,,,TNT,480 g,480 g
+RBS-132,dumb rockets,51.6 kg,,,,,FALSE,,,,,TNT,1.4 kg,1.4 kg
+RBS-82,dumb rockets,15 kg,,,,,FALSE,,,,,TNT,480 g,480 g
 ROFS-132 ,dumb rockets,41.9 kg,,,,,FALSE,,,,,TNT,4.6 kg,4.6 kg
 ROS-132,dumb rockets,23.5 kg,,,,,FALSE,,,,,TNT,2.5 kg,2.5 kg
 ROS-82,dumb rockets,6.8 kg,,,,,FALSE,,,,,TNT,400 g,400 g
@@ -79,7 +79,7 @@ ZB-500,dumb bombs,374 kg,,,,,FALSE,,,,,CKC,250 kg,250 kg
 Zuni Mk32 Mod 0 ATAP,Air-to-Ground,57.3 kg,,,,,FALSE,,,,,Comp. B,6.8 kg,8.9 kg
 50 kg SC50JA,dumb bombs,50 kg,,,,,FALSE,,,,,Fp.60/40,25 kg,
 250 kg SC250JA,dumb bombs,250 kg,,,,,FALSE,,,,,Fp.60/40,125 kg,
-Flam C 250,incendiary bomb,,,,,,,,,,,,,
+Flam C 250,dumb bombs,,,,,,,,,,,,,
 Flam C 250,dumb bombs,110 kg,,,,,FALSE,,,,,FP 02,50 kg,
 Wfr.Gr.21,dumb rockets,112 kg,,,,,FALSE,,,,,FP 02,9.5 kg,
 LITENING III targeting pod,other,120 kg,,,,,FALSE,,,,,,,
