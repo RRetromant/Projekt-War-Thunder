@@ -693,7 +693,6 @@ class FlugzeugDatenApp(ctk.CTk):
 #Waffenwiki Editierablauf
 #__________________________________________________________________________________________________________________________________________________________
     def add_weapon(self):
-
         pass
 
     def edit_weapon(self):
@@ -703,11 +702,11 @@ class FlugzeugDatenApp(ctk.CTk):
         pass
 
     def get_weapon_class(self): # =42
-        waffen_info_entries = (
+        waffen_info_entries = [
             "weapon_entry",
             #"armament_type_entry",
-            "projectile_mass_entry",
-        )
+            "projectile_mass_entry"
+        ]
         if self.selected_weapon_type in ("dumb bombs","retarded bombs", "dumb rockets" ,"guided-bombs", "Air-to-Ground", "Air-to-Air"):
             waffen_info_entries.append("explo_type_entry")
             waffen_info_entries.append("explosive_mass_entry")
@@ -728,15 +727,15 @@ class FlugzeugDatenApp(ctk.CTk):
 
     def weapon_bestaetigen(self):
 
-        waffen_info_entries = self.get_weapon_class
+        waffen_info_entries = self.get_weapon_class()
         print (waffen_info_entries)
 
         info_waffe = [
             getattr(self, name).get() if hasattr(self, name) else ''
-            for name in waffen_info_entries #wenn es in Waffen_info_entries einen Eintrag gibt, dann schnapp sie dir Tiger
+            for name in waffen_info_entries
         ]
 
-        if any(eintrag == '' for eintrag in info_waffe):
+        if any(eintrag == '' for eintrag in info_waffe): #weiss nicht warum ihr mich nicht hört aber geht
             print(info_waffe)
             self.text_area.configure(state="normal")
             self.text_area.delete("1.0", "end")
@@ -744,6 +743,12 @@ class FlugzeugDatenApp(ctk.CTk):
             self.text_area.configure(state="disabled")
             self.weapon_window.destroy()
             self.open_add_weapon()
+
+        else:
+            print(info_waffe)
+            self.save_new_weapon()
+
+
 
     def save_new_weapon(self):
         pass
