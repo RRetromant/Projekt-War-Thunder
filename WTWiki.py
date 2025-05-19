@@ -702,7 +702,7 @@ class FlugzeugDatenApp(ctk.CTk):
     def get_weapon_class(self, show_all= False): # =42
         waffen_info_entries = [
             "weapon_entry",
-            "armament_type_entry",
+            "weapon_type_entry",
             "projectile_mass_entry"
         ]
         if self.selected_weapon_type in ("dumb bombs","retarded bombs", "dumb rockets" ,"guided-bombs", "Air-to-Ground", "Air-to-Air") or show_all:
@@ -723,9 +723,6 @@ class FlugzeugDatenApp(ctk.CTk):
 
         return waffen_info_entries
 
-    def translate_get_:
-        pass
-
     def weapon_bestaetigen(self):
 
         waffen_info_entries = self.get_weapon_class()
@@ -735,7 +732,7 @@ class FlugzeugDatenApp(ctk.CTk):
             for name in waffen_info_entries
         ]
 
-        if any(eintrag == '' for eintrag in info_waffe): #weiss nicht warum ihr mich nicht hört aber geht
+        if any(eintrag == '' for eintrag in info_waffe):
             print(info_waffe)
             self.text_area.configure(state="normal")
             self.text_area.delete("1.0", "end")
@@ -753,8 +750,25 @@ class FlugzeugDatenApp(ctk.CTk):
         for waffe_info_entry in waffen_info_entries:
             info_waffe[waffe_info_entry] = getattr(self, waffe_info_entry).get() if hasattr(self, waffe_info_entry) else ''
         print(info_waffe)
+
+        for fromKey, toKey in [("weapon_entry", "Name"),    #Übersetzer, damit die Werte CSVWorker entsprechen
+                               ("weapon_type_entry", "Type"),
+                               ("projectile_mass_entry", "Projectile-Masse"),
+                               ("explo_type_entry", "Explosive-Type"),
+                               ("explosive_mass_entry", "Explosive-Mass"),
+                               ("TNT_equivalent_entry", "TNT-equivalent"),
+                               ("guidance_entry", "Guidance"),
+                               ("missile_guidance_time_entry", "Missile-guidance-time"),
+                               ("launch_range_entry", "Launch-range"),
+                               ("max_speed_entry", "Maximum-speed"),
+                               ("aspect_entry", "Aspect"),
+                               ("lockrange_entry", "Lock-range-in-all-aspect"),
+                               ("lockrange_rear_entry", "Lock-range-in-rear-aspect"),
+                               ("max_g_entry", "Maximum-Overload")]:
+            if fromKey in info_waffe:
+                info_waffe[toKey] = info_waffe.pop(fromKey)
+
         new_weapon = info_waffe["Name"]
-        new_weapon_type = self.weapon_type_entry.get()
         existing = False
         for entry in armament_data:
             if entry.name == new_weapon:
@@ -763,8 +777,9 @@ class FlugzeugDatenApp(ctk.CTk):
 
         if not existing:
             new_entry = cw.add_armament(info_waffe)
-
-            aircraft_data.append(new_entry)
+            print(new_entry)
+            armament_data.append(new_entry)
+            cw.export_armaments("Armament.csv", armament_data)
         elif existing:
             pass
 
