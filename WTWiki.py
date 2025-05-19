@@ -672,7 +672,12 @@ class FlugzeugDatenApp(ctk.CTk):
         self.confirm_add_button = ctk.CTkButton(master=self.weapon_window,text="Confirm", command=self.weapon_bestaetigen)
         self.confirm_add_button.pack(pady=20)
 
-    def edit_weapon(self,auswahl):
+#Waffenwiki Editierablauf
+#__________________________________________________________________________________________________________________________________________________________
+    def add_weapon(self):
+        pass
+
+    def edit_weapon(self, auswahl):
         self.waffe_ausgewählt(auswahl)
         for entry in armament_data:
             if self.selected_armament == entry.name:
@@ -689,14 +694,6 @@ class FlugzeugDatenApp(ctk.CTk):
                 self.TNT_equivalent_entry.delete(0, 'end')
                 self.TNT_equivalent_entry.insert(0, entry.TNT_equivalent)
                 pass
-
-#Waffenwiki Editierablauf
-#__________________________________________________________________________________________________________________________________________________________
-    def add_weapon(self):
-        pass
-
-    def edit_weapon(self):
-        pass
 
     def delete_weapon(self):
         pass
