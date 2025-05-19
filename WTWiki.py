@@ -342,7 +342,7 @@ class FlugzeugDatenApp(ctk.CTk):
 # _________________________________________________________________________________________________________________________________________________________
     def neue_nation_checktask(self, auswahl):  # Damit der Button live gecheckt wird
         if hasattr(self, 'nationen_entry'):
-            ..destroy()
+            #..destroy()
             self.flugzeug_entry.destroy()
             self.battle_rating_entry.destroy()
             self.klasse_entry.destroy()
@@ -666,7 +666,7 @@ class FlugzeugDatenApp(ctk.CTk):
             self.max_g_entry = ctk.CTkEntry(master=self.weapon_window, placeholder_text="Maximale G Belastung")
             self.max_g_entry.pack(pady=5)
 
-        self.confirm_add_button = ctk.CTkButton(master=self.weapon_window,text="Confirm", command=self.bestaetigen)
+        self.confirm_add_button = ctk.CTkButton(master=self.weapon_window,text="Confirm", command=self.weapon_bestaetigen)
         self.confirm_add_button.pack(pady=20)
 
     def edit_weapon(self,auswahl):
@@ -700,31 +700,35 @@ class FlugzeugDatenApp(ctk.CTk):
         pass
 
     def weapon_bestaetigen(self):
-        info_waffe = [
-            self.name_entry.get(),
-            self.armament_entry.get(),
-            self.projectile_mass_entry.get(),
-            self.projectile_mass_entry.get(),
-            self.explosive_type_entry.get(),
-            self.explosive_mass_entry.get(),
-            self.TNT_equivalent_entry.get(),
-            self.guidance_entry.get(),
-            self.missile_guidance_time_entry.get()
-            self.launch_range_entry.get()
-            self.maxspeed_entry.get()
-            self.aspect_entry.get()
-            self.lock_range_entry.get()
-            self.lock_range_rear_entry.get()
-            self.maxg_overload_entry.get()
-            self.armament_type
-            self.projectile_mass
+        waffen_info_entries = [
+            "name_entry",
+            "armament_entry",
+            "projectile_mass_entry",
+            "explosive_type_entry",
+            "explosive_mass_entry",
+            "TNT_equivalent_entry",
+            "guidance_entry",
+            "missile_guidance_time_entry",
+            "launch_range_entry",
+            "max_speed_entry",
+            "aspect_entry",
+            "lockrange_entry",
+            "lockrange_rear_entry",
+            "max_g_entry",
+            "armament_type_entry"
         ]
-        elif any(eintrag == '' for eintrag in info_waffe[1:]):
+
+        info_waffe = [
+            getattr(self, name).get() if hasattr(self, name) else ''
+            for name in waffen_info_entries
+        ]
+
+        if any(eintrag == '' for eintrag in info_waffe[1:]):
             self.text_area.configure(state="normal")
             self.text_area.delete("1.0", "end")
             self.text_area.insert("1.0", "Bitte gib zusätzliche Informationen ein.")
             self.text_area.configure(state="disabled")
-            self.add_window.destroy()
+            self.weapon_window.destroy()
             self.open_add_weapon()
 
     def save_new_weapon(self):
