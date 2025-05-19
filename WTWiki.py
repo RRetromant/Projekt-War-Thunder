@@ -49,6 +49,8 @@ open_weapon_rest                Zeigt je nach Waffentyp alle Fenster an
 add_weapon
 edit_weapon
 delete_weapon
+get_weapon_class                Checkt, welche Klasse die Waffe ist, und bei die Infoliste entsprechend 
+                                für speichern, editieren usw.
 
 '''
 
@@ -291,6 +293,7 @@ class FlugzeugDatenApp(ctk.CTk):
         self.edit_checker.set('Bitte auswählen')
 
         self.open_aircraft_structure()
+        self.confirm_add_button.configure (command=self.edit_bestaetigen)
 
     def open_delete_aircraft(self):
 
@@ -342,7 +345,7 @@ class FlugzeugDatenApp(ctk.CTk):
 # _________________________________________________________________________________________________________________________________________________________
     def neue_nation_checktask(self, auswahl):  # Damit der Button live gecheckt wird
         if hasattr(self, 'nationen_entry'):
-            #..destroy()
+            self.nationen_entry.destroy()
             self.flugzeug_entry.destroy()
             self.battle_rating_entry.destroy()
             self.klasse_entry.destroy()
@@ -562,9 +565,9 @@ class FlugzeugDatenApp(ctk.CTk):
         self.edit_label = ctk.CTkLabel(master=self.edit_window, text="Bitte wähle den Waffen Typ aus.")
         self.edit_label.pack(pady=10)
 
-        self.edit_weapon = ctk.CTkOptionMenu(master=self.edit_window, values=self.armament, command=self.edit_weapon)
-        self.edit_weapon.pack(pady=10)
-        self.edit_weapon.set('Bitte auswählen')
+        self.armament_type_entry = ctk.CTkOptionMenu(master=self.edit_window, values=self.armament, command=self.edit_weapon)
+        self.armament_type_entry.pack(pady=10)
+        self.armament_type_entry.set('Bitte auswählen')
         pass
 
     def open_delete_weapon(self):
@@ -673,18 +676,18 @@ class FlugzeugDatenApp(ctk.CTk):
         self.waffe_ausgewählt(auswahl)
         for entry in armament_data:
             if self.selected_armament == entry.name:
-                self.name.delete(0, 'end')
-                self.name.insert(0, entry.name)
-                self.armament_type.delete(0, 'end')
-                self.armament_type.insert(0, entry.armament_type)
-                self.projectile_mass.delete(0, 'end')
-                self.projectile_mass.insert(0, entry.projectile_mass)
-                self.explosive_type.delete(0, 'end')
-                self.explosive_type.insert(0, entry.explosive_type)
-                self.explosive_mass.delete(0, 'end')
-                self.explosive_mass.insert(0, entry.explosive_mass)
-                self.TNT_equivalent.delete(0, 'end')
-                self.TNT_equivalent.insert(0, entry.TNT_equivalent)
+                self.weapon_entry.delete(0, 'end')
+                self.weapon_entry.insert(0, entry.name)
+                self.armament_type_entry.delete(0, 'end')
+                self.armament_type_entry.insert(0, entry.armament_type)
+                self.projectile_mass_entry.delete(0, 'end')
+                self.projectile_mass_entry.insert(0, entry.projectile_mass)
+                self.explosive_type_entry.delete(0, 'end')
+                self.explosive_type_entry.insert(0, entry.explosive_type)
+                self.explosive_mass_entry.delete(0, 'end')
+                self.explosive_mass_entry.insert(0, entry.explosive_mass)
+                self.TNT_equivalent_entry.delete(0, 'end')
+                self.TNT_equivalent_entry.insert(0, entry.TNT_equivalent)
                 pass
 
 #Waffenwiki Editierablauf
@@ -699,31 +702,42 @@ class FlugzeugDatenApp(ctk.CTk):
     def delete_weapon(self):
         pass
 
-    def weapon_bestaetigen(self):
-        waffen_info_entries = [
-            "name_entry",
-            "armament_entry",
+    def get_weapon_class(self): # =42
+        waffen_info_entries = (
+            "weapon_entry",
+            #"armament_type_entry",
             "projectile_mass_entry",
-            "explosive_type_entry",
-            "explosive_mass_entry",
-            "TNT_equivalent_entry",
-            "guidance_entry",
-            "missile_guidance_time_entry",
-            "launch_range_entry",
-            "max_speed_entry",
-            "aspect_entry",
-            "lockrange_entry",
-            "lockrange_rear_entry",
-            "max_g_entry",
-            "armament_type_entry"
-        ]
+        )
+        if self.selected_weapon_type in ("dumb bombs","retarded bombs", "dumb rockets" ,"guided-bombs", "Air-to-Ground", "Air-to-Air"):
+            waffen_info_entries.append("explo_type_entry")
+            waffen_info_entries.append("explosive_mass_entry")
+            waffen_info_entries.append("TNT_equivalent_entry")
+        if self.selected_weapon_type in ("guided-bombs", "Air-to-Ground", "Air-to-Air"):
+            waffen_info_entries.append("guidance_entry")
+            waffen_info_entries.append("missile_guidance_time_entry")
+        if self.selected_weapon_type in ("Air-to-Ground", "Air-to-Air"):
+            waffen_info_entries.append("launch_range_entry")
+            waffen_info_entries.append("max_speed_entry")
+        if self.selected_weapon_type in ("Air-to-Air"):
+            waffen_info_entries.append("aspect_entry")
+            waffen_info_entries.append("lockrange_entry")
+            waffen_info_entries.append("lockrange_rear_entry")
+            waffen_info_entries.append("max_g_entry")
+
+        return waffen_info_entries
+
+    def weapon_bestaetigen(self):
+
+        waffen_info_entries = self.get_weapon_class
+        print (waffen_info_entries)
 
         info_waffe = [
             getattr(self, name).get() if hasattr(self, name) else ''
-            for name in waffen_info_entries
+            for name in waffen_info_entries #wenn es in Waffen_info_entries einen Eintrag gibt, dann schnapp sie dir Tiger
         ]
 
-        if any(eintrag == '' for eintrag in info_waffe[1:]):
+        if any(eintrag == '' for eintrag in info_waffe):
+            print(info_waffe)
             self.text_area.configure(state="normal")
             self.text_area.delete("1.0", "end")
             self.text_area.insert("1.0", "Bitte gib zusätzliche Informationen ein.")

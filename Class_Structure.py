@@ -13,11 +13,11 @@ class Airplane:
 class Armament: #Beinhaltet dumb Bombs, retarded Bombs, und dumb Rockets
     def __init__(self, name, armament_type, projectile_mass, explosive_type, explosive_mass, TNT_equivalent):
         self.name = name
-        self.armament_type = armament_typeectile_mass
+        self.armament_type = armament_type
         self.explosive_type = explosive_type
         self.explosive_mass = explosive_mass
         self.TNT_equivalent = TNT_equivalent
-        self.projectile_mass = proj
+        self.projectile_mass = projectile_mass
 
 #Die nächsten Klassen erben die Stats von Armament:
 class WeaponGuided(Armament): #beinhaltet Guided Bombs. neuer Stat: Guidance, Missile-guidance-time
