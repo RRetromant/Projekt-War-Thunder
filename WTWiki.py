@@ -46,12 +46,14 @@ open_delete_weapon			    braucht zwei Abfragen: type und Name.
 open_weapon_structure			Fragt nach Waffentyp, gibt dann an open_weapon_rest weiter
 open_weapon_rest                Zeigt je nach Waffentyp alle Fenster an
 -----------------------------------------------------------------------------------------------------------
-add_weapon
-edit_weapon
-delete_weapon
-get_weapon_class                Checkt, welche Klasse die Waffe ist, und bei die Infoliste entsprechend 
-                                für speichern, editieren usw.
-
+add_weapon                      Fügt Waffen hinzu
+edit_weapon                     Bestehende Waffen editierbar
+delete_weapon                   Waffen können gelöscht werden mit sicheheitsabfrage
+get_weapon_class                Checkt, welche Klasse die Waffe ist, und bei die Infoliste entsprechend für speichern, editieren usw.
+get_weapon_class_translate
+Weapon_bestaetigen              
+edit_weapon_bestaetigen         
+save_new_weapon                 
 '''
 
 # Flugzeugdaten laden
@@ -59,6 +61,7 @@ filename_aircraft = 'Aircraft.csv'  #  Dateipfad
 filename_armament = 'Armament.csv'
 aircraft_data = cw.import_aircraft(filename_aircraft)
 armament_data = cw.import_armaments(filename_armament)
+
 
 if aircraft_data is None:
     print("Fehler: Konnte die Flugzeugdaten nicht laden.")
@@ -195,11 +198,11 @@ class FlugzeugDatenApp(ctk.CTk):
 
         self.edit_armament_button = ctk.CTkButton(master=self.frame_links, text="Edit Armament",command=self.open_edit_weapon)
         self.edit_armament_button.pack(pady=10)
-        self.edit_armament_button.configure(state="disabled")
+        #self.edit_armament_button.configure(state="disabled")
 
-        self.delete_button = ctk.CTkButton(master=self.frame_links, text="Löschen", command=self.open_delete_aircraft)
+        self.delete_button = ctk.CTkButton(master=self.frame_links, text="Löschen", command=self.open_delete_weapon)
         self.delete_button.pack(pady=10)
-        self.delete_button.configure(state="disabled")
+        #self.delete_button.configure(state="disabled")
         # Oben: Daten Flugzeug______________________________________________________________________________________________________________________________
         self.text_area = ctk.CTkTextbox(master=self, width=400, wrap="word")
         self.text_area.grid(row=0, column=1,  padx=20, pady=20, sticky="nsew")
@@ -559,31 +562,27 @@ class FlugzeugDatenApp(ctk.CTk):
         self.open_weapon_structure()
 
     def open_edit_weapon(self):
-        self.edit_window = ctk.CTkToplevel(self)
-        self.edit_window.title("Waffe bearbeiten")
-        self.edit_window.geometry("400x650")
-
-        self.edit_label = ctk.CTkLabel(master=self.edit_window, text="Bitte wähle den Waffen Typ aus.")
-        self.edit_label.pack(pady=10)
-
-        self.armament_type_entry = ctk.CTkOptionMenu(master=self.edit_window, values=self.armament, command=self.edit_weapon)
-        self.armament_type_entry.pack(pady=10)
-        self.armament_type_entry.set('Bitte auswählen')
-        pass
+        self.weapon_window = ctk.CTkToplevel(self)
+        self.weapon_window.title("Waffen Fenster")
+        self.weapon_window.geometry("400x650")
+        print(self.selected_weapon_type)
+        print(self.selected_waffe)
+        self.open_weapon_rest()
+        self.edit_weapon()
 
     def open_delete_weapon(self):
         pass
 
-    def open_weapon_structure(self):
+    def open_weapon_structure(self, edit_window=False):
 
         self.weapon_entry = ctk.CTkLabel(master=self.weapon_window, text="Waffentyp:")
         self.weapon_entry.pack(pady=5)
 
         self.weapon_type_entry = ctk.CTkOptionMenu(master=self.weapon_window, values=self.weapon_types,
-                                                   command=self.open_weapon_rest)
+                                                   command=self.clear_weapon_structure)
         self.weapon_type_entry.pack(pady=5)
 
-    def open_weapon_rest(self, auswahl):
+    def clear_weapon_structure(self, auswahl):
         self.armament_type_ausgewaehlt(auswahl)
         print("Attributänderung")
         try:
@@ -624,6 +623,10 @@ class FlugzeugDatenApp(ctk.CTk):
         except:
             pass
 
+        self.open_weapon_rest()
+
+    def open_weapon_rest(self):
+
         self.weapon_entry = ctk.CTkEntry(master=self.weapon_window, placeholder_text="Neue Waffe")
         self.weapon_entry.pack(pady=10)
 
@@ -650,11 +653,11 @@ class FlugzeugDatenApp(ctk.CTk):
 
         if self.selected_weapon_type in ["Air-to-Ground", "Air-to-Air"]:
             self.launch_range_entry = ctk.CTkEntry(master=self.weapon_window,
-                                                            placeholder_text="Launch Range")
+                                                                placeholder_text="Launch Range")
             self.launch_range_entry.pack(pady=5)
 
             self.max_speed_entry = ctk.CTkEntry(master=self.weapon_window,
-                                                            placeholder_text="Maximum Speed")
+                                                                placeholder_text="Maximum Speed")
             self.max_speed_entry.pack(pady=5)
 
         if self.selected_weapon_type in ["Air-to-Air"]:
@@ -678,23 +681,58 @@ class FlugzeugDatenApp(ctk.CTk):
     def add_weapon(self):
         pass
 
-    def edit_weapon(self, auswahl):
-        self.waffe_ausgewählt(auswahl)
+    def edit_weapon(self):
         for entry in armament_data:
-            if self.selected_armament == entry.name:
-                self.weapon_entry.delete(0, 'end')
-                self.weapon_entry.insert(0, entry.name)
-                self.armament_type_entry.delete(0, 'end')
-                self.armament_type_entry.insert(0, entry.armament_type)
-                self.projectile_mass_entry.delete(0, 'end')
-                self.projectile_mass_entry.insert(0, entry.projectile_mass)
-                self.explosive_type_entry.delete(0, 'end')
-                self.explosive_type_entry.insert(0, entry.explosive_type)
-                self.explosive_mass_entry.delete(0, 'end')
-                self.explosive_mass_entry.insert(0, entry.explosive_mass)
-                self.TNT_equivalent_entry.delete(0, 'end')
-                self.TNT_equivalent_entry.insert(0, entry.TNT_equivalent)
-                pass
+            if self.selected_waffe == entry.name:
+
+                #self.armament_type_entry.delete(0, 'end')
+                #self.armament_type_entry.insert(0, entry.armament_type)
+
+                try:
+                    #self.weapon_entry.delete(0, 'end')
+                    #self.weapon_entry.insert(0, entry.name)
+                    self.projectile_mass_entry.delete(0, 'end')
+                    self.projectile_mass_entry.insert(0, entry.projectile_mass)
+                except:
+                    pass
+
+                try:
+                    self.explo_type_entry.delete(0, 'end')
+                    self.explo_type_entry.insert(0, entry.explosive_type)
+                    self.explosive_mass_entry.delete(0, 'end')
+                    self.explosive_mass_entry.insert(0, entry.explosive_mass)
+                    self.TNT_equivalent_entry.delete(0, 'end')
+                    self.TNT_equivalent_entry.insert(0, entry.TNT_equivalent)
+                except:
+                    pass
+
+                try:
+                    self.guidance_entry.delete(0, 'end')
+                    self.guidance_entry.insert(0, entry.guidance)
+                    self.missile_guidance_time_entry.delete(0, 'end')
+                    self.missile_guidance_time_entry.insert(0, entry.missile_guidance_time)        # entry
+                except:
+                    pass
+
+                try:
+                    self.launch_range_entry.delete(0, 'end')
+                    self.launch_range_entry.insert(0, entry.launch_range)
+                    self.max_speed_entry.delete(0, 'end')
+                    self.max_speed_entry.insert(0, entry.maxspeed)
+                except:
+                    pass
+
+                try:
+                    self.aspect_entry.delete(0, 'end')
+                    self.aspect_entry.insert(0, entry.aspect)
+                    self.lockrange_entry.delete(0, 'end')
+                    self.lockrange_entry.insert(0, entry.lock_range)
+                    self.lockrange_rear_entry.delete(0, 'end')
+                    self.lockrange_rear_entry.insert(0, entry.lock_range_rear)
+                    self.max_g_entry.delete(0, 'end')
+                    self.max_g_entry.insert(0, entry.maxg_overload)
+                except:
+                    pass
 
     def delete_weapon(self):
         pass
@@ -723,6 +761,24 @@ class FlugzeugDatenApp(ctk.CTk):
 
         return waffen_info_entries
 
+    def get_weapon_class_translate(self, info_waffe):
+        for fromKey, toKey in [("weapon_entry", "Name"),    #Übersetzer, damit die Werte CSVWorker entsprechen
+                               ("weapon_type_entry", "Type"),
+                               ("projectile_mass_entry", "Projectile-Masse"),
+                               ("explo_type_entry", "Explosive-Type"),
+                               ("explosive_mass_entry", "Explosive-Mass"),
+                               ("TNT_equivalent_entry", "TNT-equivalent"),
+                               ("guidance_entry", "Guidance"),
+                               ("missile_guidance_time_entry", "Missile-guidance-time"),
+                               ("launch_range_entry", "Launch-range"),
+                               ("max_speed_entry", "Maximum-speed"),
+                               ("aspect_entry", "Aspect"),
+                               ("lockrange_entry", "Lock-range-in-all-aspect"),
+                               ("lockrange_rear_entry", "Lock-range-in-rear-aspect"),
+                               ("max_g_entry", "Maximum-Overload")]:
+            if fromKey in info_waffe:
+                info_waffe[toKey] = info_waffe.pop(fromKey)
+
     def weapon_bestaetigen(self):
 
         waffen_info_entries = self.get_weapon_class()
@@ -744,29 +800,39 @@ class FlugzeugDatenApp(ctk.CTk):
         else:
             self.save_new_weapon()
 
+    def edit_weapon_bestaetigen(self):
+        waffen_info_entries = self.get_weapon_class()
+
+        info_waffe = [
+            getattr(self, name).get() if hasattr(self, name) else ''
+            for name in waffen_info_entries
+        ]
+        waffen_info_entries = self.get_weapon_class()
+        print("saving new weapon")
+        info_waffe = {}
+        for waffe_info_entry in waffen_info_entries:
+            info_waffe[waffe_info_entry] = getattr(self, waffe_info_entry).get() if hasattr(self,
+                                                                                            waffe_info_entry) else ''
+        print(info_waffe)
+
+        self.get_weapon_class_translate(info_waffe)
+
+        edited_weapon = self.selected_waffe
+
+        for entry in armament_data:
+            if entry.name == edited_weapon:
+                cw.edit_armament(entry)
+
+
     def save_new_weapon(self):
         waffen_info_entries = self.get_weapon_class()
+        print("saving new weapon")
         info_waffe = {}
         for waffe_info_entry in waffen_info_entries:
             info_waffe[waffe_info_entry] = getattr(self, waffe_info_entry).get() if hasattr(self, waffe_info_entry) else ''
         print(info_waffe)
 
-        for fromKey, toKey in [("weapon_entry", "Name"),    #Übersetzer, damit die Werte CSVWorker entsprechen
-                               ("weapon_type_entry", "Type"),
-                               ("projectile_mass_entry", "Projectile-Masse"),
-                               ("explo_type_entry", "Explosive-Type"),
-                               ("explosive_mass_entry", "Explosive-Mass"),
-                               ("TNT_equivalent_entry", "TNT-equivalent"),
-                               ("guidance_entry", "Guidance"),
-                               ("missile_guidance_time_entry", "Missile-guidance-time"),
-                               ("launch_range_entry", "Launch-range"),
-                               ("max_speed_entry", "Maximum-speed"),
-                               ("aspect_entry", "Aspect"),
-                               ("lockrange_entry", "Lock-range-in-all-aspect"),
-                               ("lockrange_rear_entry", "Lock-range-in-rear-aspect"),
-                               ("max_g_entry", "Maximum-Overload")]:
-            if fromKey in info_waffe:
-                info_waffe[toKey] = info_waffe.pop(fromKey)
+        self.get_weapon_class_translate(info_waffe)
 
         new_weapon = info_waffe["Name"]
         existing = False
@@ -782,6 +848,9 @@ class FlugzeugDatenApp(ctk.CTk):
             cw.export_armaments("Armament.csv", armament_data)
         elif existing:
             pass
+
+        self.weapon_window.destroy()
+        self.update_parameters()
 
 #Programm Mainloop
 #__________________________________________________________________________________________________________________________________________________________
