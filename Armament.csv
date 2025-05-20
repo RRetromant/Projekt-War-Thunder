@@ -25,13 +25,13 @@ Name,Type,Projectile-Masse,Guidance,Aspect,Lock-range-in-rear-aspect,Lock-range-
 AGM-12B Bullpup,Air-to-Ground,259 kg,Manual (MCLOS),,,,,,455 m/s,,30 s,Comp. H6,43 kg,58 kg
 AGM-65D,Air-to-Ground,226.8 kg,IR,,,,,23 km,0.9 M,,105 s,Composition B,39.1 kg,51.2 kg
 AGM-65G,Air-to-Ground,303.5 kg,IR,,,,,23 km,0.9 M,,105 s,PBXN-110,39 kg,49.9 kg
-AIM-120A,Air-to-Air,147.9 kg,ARH+IOG+DL,All-aspects,"",16 km,,80 km,4 M,35 G,80 s,PBXN-110,7.7 kg,9.8 kg
+AIM-120A,Air-to-Air,147.9 kg,ARH+IOG+DL,All-aspects,,16 km,,80 km,4 M,35 G,80 s,PBXN-110,7.7 kg,9.8 kg
 AIM-120B,Air-to-Air,147.9 kg,ARH+IOG+DL,All-aspects,,16 km,,80 km,4 M,35 G,80 s,PBXN-110,7.7 kg,9.8 kg
 AIM-7M,Air-to-Air,231.3 kg,SARH,Front-aspects,50 km,,,100 km,4 M,25 G,75 s,PBXN-3,11.8 kg,15.1 kg
 AIM-9E,Air-to-Air,76.4 kg,IR,Rear-aspects,5.5 km,,,18 km,2.5 M,10 G,20 s,HBX,4.8 kg,7.6 kg
 AIM-9L,Air-to-Air,84.5 kg,IR,All-aspects,11 km,3 km,,18 km,2.5 M,30 G,60 s,PBXN-102,3.6 kg,4.6 kg
 AIM-9L/I-1,Air-to-Air,42.25 kg,IR,All-aspects,11 km,3 km,,18 km,2.5 M,30 G,60 s,PBXN-102,3.6 kg,4.6 kg
-AIM-9M,Air-to-Air,84.5 kg,IR,All-aspects,11 km,3 km,,"",2.5 M,30 G,60 s,PBXN-102,3.6 kg,4.6 kg
+AIM-9M,Air-to-Air,84.5 kg,IR,All-aspects,11 km,3 km,,,2.5 M,30 G,60 s,PBXN-102,3.6 kg,4.6 kg
 BLU-1,dumb bombs,401.4 kg,,,,,,,,,,Napalm-B,358.3 kg,
 BLU-27/B,dumb bombs,401.4 kg,,,,,,,,,,Napalm-B,358.3 kg,
 Drop tank (1000 liters.),other,116 kg,,,,,,,,,,,,
@@ -77,4 +77,3 @@ LITENING III targeting pod,other,120 kg,,,,,,,,,,,,
 100 kg FAB-100M-43,dumb bombs,100 kg,,,,,,,,,,TNT,49.93 kg,49.93 kg
 FAB-50,dumb bombs,50 kg,,,,,,,,,,,,
 R60,Air-to-Air,43.5 kg,IR,,5 km,,,10 km,2.5 M,30 G,25 s,TNT,1.1 kg,1.1 kg
-Test,Air-to-Ground,hbj,kjb,,,,,jkb,jlkb,,bjlk,kjh�,lkjh,kj
