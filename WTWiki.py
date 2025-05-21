@@ -700,7 +700,6 @@ class FlugzeugDatenApp(ctk.CTk):
         if edit_window:
             self.confirm_add_button.configure(command=self.edit_weapon_bestaetigen)
 
-
 #Waffenwiki Editierablauf
 #__________________________________________________________________________________________________________________________________________________________
 
@@ -895,8 +894,6 @@ class FlugzeugDatenApp(ctk.CTk):
         self.weapon_window.destroy()
         self.update_parameters()
         self.choose_wiki("Waffen")
-
-
 
     def save_new_weapon(self): #prüft, ob der Eintrag schon existiert, und fügt einen neuen Eintrag in armament_data hinzu
         waffen_info_entries = self.get_weapon_class()
