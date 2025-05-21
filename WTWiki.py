@@ -72,7 +72,7 @@ class FlugzeugDatenApp(ctk.CTk):
         super().__init__()
         self.delete_window = None
         self.title("Wiki")
-        self.geometry("800x600")  # Fenster größe
+        self.geometry("800x600")# Fenster größe#
         self.grid_columnconfigure(0, weight=0)
         self.grid_columnconfigure(1, weight=1)  # Für das Textfeld
 
@@ -521,6 +521,7 @@ class FlugzeugDatenApp(ctk.CTk):
             cw.export_aircraft(filename_aircraft, aircraft_data)
             self.update_parameters()
             self.add_window.destroy()
+            self.choose_wiki("Flugzeuge")
 
     def save_new_aircraft(self):
         if self.nationen_entry:
@@ -567,6 +568,7 @@ class FlugzeugDatenApp(ctk.CTk):
             # Speichere die neuen Daten in der CSV-Datei
             cw.export_aircraft(filename_aircraft, aircraft_data)
             self.update_parameters()
+            self.choose_wiki("Flugzeuge")
 
             # Schließe das Add-Fenster
             self.add_window.destroy()
@@ -605,9 +607,12 @@ class FlugzeugDatenApp(ctk.CTk):
         self.delete_confirm_button = ctk.CTkButton(master=self.weapon_window, text="ja",
                                                    command=self.delete_weapon)
         self.delete_confirm_button.pack(pady=5)
-        self.delete_confirm_button = ctk.CTkButton(master=self.weapon_window, text="nein")
+        self.delete_confirm_button = ctk.CTkButton(master=self.weapon_window, text="nein",
+                                                   command=self.kill_delete_task)
         self.delete_confirm_button.pack(pady=5)
 
+    def kill_delete_task(self):
+        self.weapon_window.destroy()
 
     def open_weapon_structure(self, edit_window=False):
 
@@ -779,6 +784,8 @@ class FlugzeugDatenApp(ctk.CTk):
                 armament_data.remove(row)
                 cw.export_armaments("Armament.csv", armament_data)
                 self.update_parameters()
+                self.weapon_window.destroy()
+                self.choose_wiki("Waffen")
 
     def get_weapon_class(self, show_all= False): # =42
         waffen_info_entries = [
@@ -913,6 +920,7 @@ class FlugzeugDatenApp(ctk.CTk):
         cw.export_armaments("Armament.csv", armament_data)
         self.weapon_window.destroy()
         self.update_parameters()
+        self.choose_wiki("Waffen")
 
 
 
@@ -943,6 +951,7 @@ class FlugzeugDatenApp(ctk.CTk):
 
         self.weapon_window.destroy()
         self.update_parameters()
+        self.choose_wiki("Waffen")
 
 #Programm Mainloop
 #__________________________________________________________________________________________________________________________________________________________
