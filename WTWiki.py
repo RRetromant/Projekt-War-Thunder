@@ -142,35 +142,31 @@ class FlugzeugDatenApp(ctk.CTk):
         elif auswahl == "Waffen":
             self.create_widgets_waffen()
 
-    def create_widgets_flugzeuge(self):
+        def create_widgets_flugzeuge(self):
         font_size = 25#Schriftgröße (Textfeld)
-
-        self.nationen_label = ctk.CTkLabel(master=self.frame_links, text="Nation auswählen:")
-        self.nationen_label.pack(pady=10)
 
         self.nationen_combobox = ctk.CTkOptionMenu(master=self.frame_links, values=self.nationen,command=self.nation_ausgewaehlt)
         self.nationen_combobox.pack(pady=10)
-        self.nationen_combobox.set('')
-
-        self.flugzeuge_label = ctk.CTkLabel(master=self.frame_links, text="Flugzeug auswählen:")
-        self.flugzeuge_label.pack(pady=10)
+        self.nationen_combobox.set('Nation')
 
         self.flugzeuge_combobox = ctk.CTkOptionMenu(master=self.frame_links, values=[], state='normal',command=self.flugzeug_ausgewaehlt)  # state = normal
         self.flugzeuge_combobox.pack(pady=10)
-        self.flugzeuge_combobox.set('')
+        self.flugzeuge_combobox.set('Flugzeug')
 
         self.confirm_button = ctk.CTkButton(master=self.frame_links, text="Bestätigen", command=self.zeige_flugzeug_daten)
-        self.confirm_button.pack(pady=20)
+        self.confirm_button.pack(pady=(10,100))
 
-        self.add_button_flieger = ctk.CTkButton(master=self.frame_links, text="Add Nation/Flugzeug",
-                                        command=self.open_add_aircraft)
-        self.add_button_flieger.pack(pady=10)
+        self.auswahl = ctk.CTkLabel(master=self.frame_links, text="Flugzeug: ")
+        self.auswahl.pack(pady=10)
 
-        self.edit_button =ctk.CTkButton(master=self.frame_links,text="Edit Nation/Flugzeug",command = self.open_edit_aircraft)
-        self.edit_button.pack(pady=10)
+        self.add_button_flieger = ctk.CTkButton(master=self.frame_links, text="Hinzufügen",command=self.open_add_aircraft)
+        self.add_button_flieger.pack(pady=(5,5))
+
+        self.edit_button =ctk.CTkButton(master=self.frame_links,text="Editieren",command = self.open_edit_aircraft)
+        self.edit_button.pack(pady=(5,5))
 
         self.delete_button = ctk.CTkButton(master=self.frame_links, text="Löschen", command=self.open_delete_aircraft)
-        self.delete_button.pack(pady=10)
+        self.delete_button.pack(pady=(5,5))
 
     #Daten Output ______________________________________________________________________________________________________________________________
         self.text_area = ctk.CTkTextbox(master=self, width=400,font=("", font_size),wrap="word")
