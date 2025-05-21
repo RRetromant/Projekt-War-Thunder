@@ -1,5 +1,5 @@
 # Projekt-War-Thunder
-Schulprojekt
+Schulprojekt, unsere Abgabe ist der Branch "Abgespeckt"
 
 ## Allgemeines:
 Zeitrahmen:
